@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Inbound - Batik ABC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="inbound-style.css"> 
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="logo-area">
+            <img src="../gambar/logo2.png" alt="Logo" class="login-logo-img" onerror="this.style.display='none'; document.getElementById('alt-logo').style.display='block'">
+            <h2 id="alt-logo" style="display:none; color:var(--primary);">ABC Warehouse</h2>
+            
+            <h2 style="margin-top: 10px;">Inbound Station</h2>
+            <p class="text-muted" style="font-size: 0.9rem;">Staf Labeling & Scanning</p>
+        </div>
+        <form id="loginForm">
+            <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                <label>ID Station / NIK</label>
+                <input type="text" value="station_01" class="input-modern" required>
+            </div>
+            <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                <label>PIN Akses</label>
+                <input type="password" placeholder="******" class="input-modern" required>
+            </div>
+            <button type="button" onclick="window.location.href='inbound.html'" class="btn-primary full-width" style="margin-top: 20px; padding: 15px;">Buka Station</button>
+        </form>
+    </div>
+</body>
+</html>

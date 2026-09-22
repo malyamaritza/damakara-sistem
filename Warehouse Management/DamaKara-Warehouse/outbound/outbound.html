@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outbound - Staf Pengiriman ABC</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="outbound-style.css">
+</head>
+<body>
+
+    <nav class="sidebar">
+    <div class="sidebar-header">
+        <img src="../gambar/logoputihnobg.png" alt="ABC" class="sidebar-logo">
+    </div>
+    
+    <ul class="nav-links">
+        <li class="active" onclick="showPage('dashboard')" title="Dashboard">
+            <a href="#">
+                <i class="fas fa-chart-pie"></i> 
+                <span class="link-text">Dashboard</span>
+            </a>
+        </li>
+        
+        <li onclick="showPage('restock')" title="Daftar Restock Order">
+            <a href="#">
+                <i class="fas fa-clipboard-list"></i> 
+                <span class="link-text">Restock Order</span>
+            </a>
+        </li>
+
+        <li onclick="showPage('scan')" title="Scan Barang Keluar">
+            <a href="#">
+                <i class="fas fa-barcode"></i> 
+                <span class="link-text">Scan Out</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="sidebar-footer">
+        <li onclick="window.location.href='outbound-login.html'">
+            <a href="#">
+                <i class="fas fa-sign-out-alt"></i> 
+                <span class="link-text">Keluar Station</span>
+            </a>
+        </li>
+    </div>
+</nav>
+
+    <main class="main-content">
+        
+        <header class="top-bar">
+            <div>
+                <h2 id="pageTitle">Outbound Dashboard</h2>
+                <p class="subtitle">Kelola pengeluaran barang dan distribusi</p>
+            </div>
+            <div class="user-profile">
+                <div class="text-info">
+                    <span class="name">Raka (Outbound)</span>
+                    <span class="role">Staf Gudang</span>
+                </div>
+                <div class="avatar">OB</div>
+            </div>
+        </header>
+
+        <section id="dashboard-page" class="page-section active">
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="icon"><i class="fas fa-truck-loading"></i></div>
+                    <div class="info">
+                        <h3>5 Order</h3>
+                        <p>Siap Dikirim (Approved)</p>
+                    </div>
+                </div>
+                <div class="stat-card success">
+                    <div class="icon"><i class="fas fa-barcode"></i></div>
+                    <div class="info">
+                        <h3 id="statTotalScan">0 Pcs</h3>
+                        <p>Total Scan Out Hari Ini</p>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="icon"><i class="fas fa-store"></i></div>
+                    <div class="info">
+                        <h3>150 Pcs</h3>
+                        <p>Distribusi ke Store</p>
+                    </div>
+                </div>
+                <div class="stat-card info">
+                    <div class="icon"><i class="fas fa-shopping-bag"></i></div>
+                    <div class="info">
+                        <h3>45 Pcs</h3>
+                        <p>Penjualan Online</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recent-activity card-panel">
+    <h3><i class="fas fa-history"></i> Log Aktivitas Terakhir</h3>
+    <div class="activity-timeline">
+        <div class="timeline-item">
+            <div class="time">10:45</div>
+            <div class="dot primary"></div>
+            <div class="content">
+                <strong>Distribusi Store (Jakarta)</strong>
+                <p>Scan Out 45 item (Kemeja Batik, Blouse...)</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="time">09:30</div>
+            <div class="dot success"></div>
+            <div class="content">
+                <strong>Restock Approved</strong>
+                <p>Admin menyetujui permintaan REQ-002</p>
+            </div>
+        </div>
+    </div>
+</div>
+        </section>
+
+        <section id="restock-page" class="page-section">
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari ID Restock / Nama Store..." onkeyup="filterRestock()">
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-btn active" onclick="setRestockFilter('Need to Pick')">Need to Pick</button>
+                    <button class="filter-btn" onclick="setRestockFilter('Shipped')">Shipped</button>
+                </div>
+            </div>
+
+            <div class="order-grid" id="restockGrid">
+                </div>
+        </section>
+
+        <section id="scan-page" class="page-section">
+            
+            <div id="scanStep1" class="scan-step-container">
+                <h3 class="step-title">Pilih Tujuan Pengeluaran Barang</h3>
+                <div class="destination-options">
+                    <div class="dest-card" onclick="selectDestination('store')">
+                        <i class="fas fa-store"></i>
+                        <h4>Distribusi Store</h4>
+                        <p>Pengiriman restock rutin ke cabang offline</p>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('online')">
+                        <i class="fas fa-globe"></i>
+                        <h4>Penjualan Online</h4>
+                        <p>Order dari Marketplace / Website (Jubelio)</p>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('event')">
+                        <i class="fas fa-tent"></i> <h4>Event / Bazar</h4>
+                        <p>Stok display untuk pameran luar</p>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('other')">
+                        <i class="fas fa-box-open"></i>
+                        <h4>Lainnya</h4>
+                        <p>Barang rusak, hadiah, atau keperluan internal</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="scanStep2" class="scan-step-container" style="display: none;">
+                <div class="scan-header-control">
+                    <button class="btn-outline" onclick="resetScanMode()"><i class="fas fa-arrow-left"></i> Kembali</button>
+                    <div class="active-mode-badge" id="activeModeBadge">MODE: -</div>
+                </div>
+
+                <div class="scan-layout">
+                    <div class="scan-input-area">
+    <div class="barcode-visual">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/EAN13.svg/1200px-EAN13.svg.png" class="barcode-img">
+        <div class="scan-laser red"></div>
+    </div>
+    
+    <div class="input-group">
+        <label>Scan Barcode & Jumlah:</label>
+        
+        <div class="scan-controls-wrapper">
+            <div style="flex: 3;">
+                <input type="text" id="barcodeInput" class="scan-field" placeholder="Scan here..." autofocus onkeypress="handleEnter(event)" style="margin-top:0;">
+            </div>
+            <div style="flex: 1;">
+                <input type="number" id="scanQty" class="scan-field" value="1" min="1" placeholder="Qty">
+            </div>
+        </div>
+        
+        <p class="hint">Tips: Isi Qty > 1 untuk scan massal.</p>
+    </div>
+
+    <div class="manual-test">
+        <p><strong>Simulasi Cepat:</strong></p>
+        <button class="btn-tag" onclick="simulateScanInput('DMK-001-L')">Setala (L)</button>
+        <button class="btn-tag" onclick="simulateScanInput('DMK-001-M')">Setala (M)</button>
+        <button class="btn-tag defect" onclick="simulateScanInput('DMK-001-L-DF')">Defect (L)</button>
+        <button class="btn-tag" onclick="simulateScanInput('DMK-004-NV')">Aksata (NV)</button>
+    </div>
+
+    <div class="summary-box" id="sessionSummaryBox">
+        <div class="summary-header">
+            <span><i class="fas fa-calculator"></i> Rekap Total Scan</span>
+            <span style="font-size:11px; color:#e74c3c; cursor:pointer; text-decoration:underline;" onclick="clearSummary()">
+                Reset
+            </span>
+        </div>
+        
+        <table class="summary-table">
+            <tbody id="summaryTableBody">
+                <tr><td colspan="2" style="text-align:center; padding:15px; color:#aaa; font-style:italic;">Belum ada item di-scan</td></tr>
+            </tbody>
+        </table>
+
+        <div class="summary-total-row">
+            <span>TOTAL BARANG</span>
+            <span id="summaryGrandTotal" style="color: var(--primary);">0 Pcs</span>
+        </div>
+    </div>
+</div>
+
+                    <div class="scan-log-area">
+                        
+                        <div class="log-header" id="normalLogHeader">
+                            <h3>Barang Keluar (Sesi Ini)</h3>
+                            <button class="btn-text" onclick="clearLog()">Clear</button>
+                        </div>
+                        <div class="log-list" id="scanLogList">
+                            <div class="empty-state">Belum ada barang di-scan</div>
+                        </div>
+
+                        <div id="pickingPanel" style="display:none; flex-direction:column; height:100%;">
+                            <div class="log-header" style="background:var(--warning); color:#5d4037;">
+                                <h3>Target Picking List</h3>
+                            </div>
+                            <div class="log-list" id="pickingItemsList" style="background:#f4f4f4;">
+                                </div>
+                            <div style="padding:15px; background:white; border-top:1px solid #ccc;">
+                                <button id="btnFinishPicking" class="btn-primary full-width" onclick="finishPicking()" disabled style="background:#ccc;">
+                                    Scan Semua Barang...
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="scan-page" class="page-section">
+            
+            <div id="scanStep1" class="scan-step-container">
+                <h3 class="step-title">Pilih Tujuan Pengeluaran Barang</h3>
+                <div class="destination-options">
+                    <div class="dest-card" onclick="selectDestination('store')">
+                        <i class="fas fa-store"></i>
+                        <h4>Distribusi Store</h4>
+                        <p>Pengiriman restock rutin ke cabang offline</p>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('online')">
+                        <i class="fas fa-globe"></i>
+                        <h4>Penjualan Online</h4>
+                        <p>Order dari Marketplace / Website (Jubelio)</p>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('event')">
+    <i class="fas fa-tent"></i> <h4>Event / Bazar</h4>
+    <p>Stok display untuk pameran luar</p>
+</div>
+                    <div class="dest-card" onclick="selectDestination('other')">
+                        <i class="fas fa-box-open"></i>
+                        <h4>Lainnya</h4>
+                        <p>Barang rusak, hadiah, atau keperluan internal</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="scanStep2" class="scan-step-container" style="display: none;">
+                <div class="scan-header-control">
+                    <button class="btn-outline" onclick="resetScanMode()"><i class="fas fa-arrow-left"></i> Kembali</button>
+                    <div class="active-mode-badge" id="activeModeBadge">MODE: -</div>
+                </div>
+
+                <div class="scan-layout">
+                    <div class="scan-input-area">
+    <div class="barcode-visual">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/EAN13.svg/1200px-EAN13.svg.png" class="barcode-img">
+        <div class="scan-laser red"></div>
+    </div>
+    
+    <div class="input-group">
+        <label>Scan Barcode & Jumlah:</label>
+        
+        <div class="scan-controls-wrapper">
+            <div style="flex: 3;">
+                <input type="text" id="barcodeInput" class="scan-field" placeholder="Scan here..." autofocus onkeypress="handleEnter(event)" style="margin-top:0;">
+            </div>
+            <div style="flex: 1;">
+                <input type="number" id="scanQty" class="scan-field" value="1" min="1" placeholder="Qty">
+            </div>
+        </div>
+        
+        <p class="hint">Tips: Isi Qty > 1 untuk scan massal.</p>
+    </div>
+
+    <div class="manual-test">
+        <p><strong>Simulasi Cepat:</strong></p>
+        <button class="btn-tag" onclick="simulateScanInput('DMK-001-L')">Setala (L)</button>
+        <button class="btn-tag" onclick="simulateScanInput('DMK-001-M')">Setala (M)</button>
+        <button class="btn-tag defect" onclick="simulateScanInput('DMK-001-L-DF')">Defect (L)</button>
+        <button class="btn-tag" onclick="simulateScanInput('DMK-004-NV')">Aksata (NV)</button>
+    </div>
+
+    <div class="summary-box">
+        <div class="summary-header">
+            <span><i class="fas fa-list-ol"></i> Rekap Sesi Ini</span>
+            <span style="font-size:10px; color:#ef4444; cursor:pointer; text-transform:none;" onclick="clearSummary()">
+                <i class="fas fa-trash"></i> Reset
+            </span>
+        </div>
+        
+        <table class="summary-table">
+            <tbody id="summaryTableBody">
+                <tr><td colspan="2" style="text-align:center; padding:15px; color:#94a3b8; font-style:italic;">Belum ada item di-scan</td></tr>
+            </tbody>
+        </table>
+
+        <div class="summary-total-row">
+            <span>TOTAL ITEM</span>
+            <span id="summaryGrandTotal">0 Pcs</span>
+        </div>
+    </div>
+</div>
+
+                    <div class="scan-log-area">
+                        
+                        <div class="log-header" id="normalLogHeader">
+                            <h3>Barang Keluar (Sesi Ini)</h3>
+                            <button class="btn-text" onclick="clearLog()">Clear Log</button>
+                        </div>
+                        <div class="log-list" id="scanLogList">
+                            <div class="empty-state">Belum ada barang di-scan</div>
+                        </div>
+
+                        <div id="pickingPanel" style="display:none; flex-direction:column; height:100%;">
+                            <div class="log-header" style="background:var(--warning); color:#5d4037;">
+                                <h3>Target Picking List</h3>
+                            </div>
+                            <div class="log-list" id="pickingItemsList" style="background:#f4f4f4;">
+                                </div>
+                            <div style="padding:15px; background:white; border-top:1px solid #ccc;">
+                                <button id="btnFinishPicking" class="btn-primary full-width" onclick="finishPicking()" disabled style="background:#ccc;">
+                                    Selesaikan Picking
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content large-modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-header-custom">
+                <div>
+                    <h3 id="modalId">REQ-001</h3>
+                    <p id="modalStore" class="subtitle">Store Jakarta Selatan</p>
+                </div>
+                <div class="badge warning">APPROVED</div>
+            </div>
+
+            <div class="modal-body scrollable">
+                <div class="info-row">
+                    <div>
+                        <small>Tanggal Request</small>
+                        <strong id="modalDate">-</strong>
+                    </div>
+                    <div>
+                        <small>Expected Date</small>
+                        <strong id="modalExpected">-</strong>
+                    </div>
+                    <div>
+                        <small>Total Item</small>
+                        <strong id="modalTotal">-</strong>
+                    </div>
+                </div>
+
+                <h4 style="margin: 20px 0 10px;">Daftar Pick List (Barang yang harus diambil)</h4>
+                <div id="modalItemsContainer">
+                    </div>
+            </div>
+
+            <div class="modal-footer">
+                <p class="text-muted small">Pastikan semua barang sudah dipicking dan dipacking sebelum konfirmasi.</p>
+                <div class="action-buttons">
+                    <button class="btn-secondary" onclick="closeModal()">Tutup</button>
+                    <button class="btn-primary" onclick="confirmShipment()">
+                        <i class="fas fa-shipping-fast"></i> Konfirmasi Kirim (Shipped)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="outbound-script.js"></script>
+</body>
+</html>

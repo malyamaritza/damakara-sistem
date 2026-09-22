@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Merchandising - Batik ABC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="../gambar/logoputihnobg.png" alt="Dama Kara" class="sidebar-logo">
+            </div>
+            <ul class="nav-links">
+                <li class="active" onclick="showPage('dashboard')" id="nav-dashboard">
+                    <a href="#"><i class="fas fa-chart-pie"></i> <span class="link-text">Dashboard</span></a>
+                </li>
+                <li onclick="showPage('products')" id="nav-products">
+                    <a href="#"><i class="fas fa-tags"></i> <span class="link-text">Kelola Produk</span></a>
+                </li>
+                <li onclick="showPage('custom-order')" id="nav-custom-order">
+                    <a href="#"><i class="fas fa-pen-nib"></i> <span class="link-text">Custom Order</span></a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <li onclick="window.location.href='merch-login.html'">
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> <span class="link-text">Logout</span></a>
+                </li>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 id="page-title">Dashboard</h2>
+                <div class="user-profile">
+                    <div style="text-align: right;">
+                        <span style="display:block; font-weight:600;">Riza Patria (Merchandiser)</span>
+                        <span class="badge-primary" style="font-size: 0.7rem; padding: 2px 8px; border-radius: 4px;">Staf Perencanaan</span>
+                    </div>
+                    <div class="avatar"><i class="fas fa-user"></i></div>
+                </div>
+            </header>
+
+            <section id="dashboard" class="page-section">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+            <div><h3>12</h3><p>Project Berjalan</p></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon warning"><i class="fas fa-exclamation-circle"></i></div>
+            <div><h3>5</h3><p>Produk Waiting Specs</p></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon success"><i class="fas fa-check-circle"></i></div>
+            <div><h3>45</h3><p>Rilis Bulan Ini</p></div>
+        </div>
+    </div>
+
+    <div class="card recent-orders">
+        <div class="card-header">
+            <h3>Status Custom Order Terbaru</h3>
+            <button class="btn btn-sm btn-outline" onclick="showPage('custom-order')">+ Order Baru</button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID Project</th>
+                    <th>Klien</th>
+                    <th>Project</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                    <th width="10%" class="text-center">Aksi</th> </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#CUST-091</td>
+                    <td>PT Telkom</td>
+                    <td>Seragam Batik Event</td>
+                    <td>20 Okt 2025</td>
+                    <td><span class="badge badge-warning">Produksi</span></td>
+                    <td class="text-center">
+                        <button class="btn-icon" onclick="viewOrderDetail('CUST-091')" title="Lihat Detail">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#CUST-092</td>
+                    <td>Ibu Ani</td>
+                    <td>Kebayoran Family</td>
+                    <td>25 Okt 2025</td>
+                    <td><span class="badge badge-info">Menunggu Kain</span></td>
+                    <td class="text-center">
+                        <button class="btn-icon" onclick="viewOrderDetail('CUST-092')" title="Lihat Detail">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+            <section id="products" class="page-section hidden">
+    <div id="product-list-view">
+        <div class="action-bar">
+            <div class="filters">
+                <select class="form-control" id="filterColl" onchange="renderProductTable()" style="width: 150px;">
+                    <option value="all">Semua Koleksi</option>
+                    <option value="Setala">Setala</option>
+                    <option value="Arkana">Arkana</option>
+                    <option value="Kala">Kala</option>
+                    <option value="Aksata">Aksata</option>
+                    <option value="Obi">Obi</option>
+                    <option value="Suar">Suar</option>
+                </select>
+                <select class="form-control" id="filterCat" onchange="renderProductTable()" style="width: 150px;">
+                    <option value="all">Semua Kategori</option>
+                    <option value="Shirt">Shirt</option>
+                    <option value="Tunik">Tunik</option>
+                    <option value="Outer">Outer</option>
+                    <option value="Accessories">Accessories</option>
+                </select>
+                <select class="form-control" id="filterUser" onchange="renderProductTable()" style="width: 150px;">
+                    <option value="all">Semua User</option>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Kids">Kids</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="toggleProductMode('add')"><i class="fas fa-plus"></i> Tambah Produk</button>
+        </div>
+        
+        <div class="card table-card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produk Info</th>
+                        <th>Kategori</th>
+                        <th>Koleksi</th>
+                        <th>User</th>
+                        <th>Status Katalog</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="product-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="product-add-view" class="hidden">
+        <div class="card form-card">
+            <div class="card-header">
+                <h3 id="formTitle"><i class="fas fa-arrow-left" onclick="toggleProductMode('list')" style="cursor:pointer; margin-right:10px;"></i> Tambah Produk Baru</h3>
+            </div>
+            
+            <input type="hidden" id="editProductId" value="">
+
+            <div class="wizard-tabs">
+                <div class="tab active" id="p-tab-1">1. Info Produk & Varian</div>
+                <div class="tab" id="p-tab-2">2. Resep Kain (Estimasi)</div>
+            </div>
+
+            <div id="p-step-1" class="step-content active">
+    <div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label>Nama Produk</label>
+            <input type="text" id="inputName" class="form-control" placeholder="Nama Baju Batik">
+        </div>
+    </div>
+</div>
+    
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Kategori (Pilih / Ketik Baru)</label>
+                <input list="catOptions" id="inputCat" class="form-control" placeholder="Pilih atau ketik...">
+                <datalist id="catOptions">
+                    <option value="Shirt">
+                    <option value="Tunik">
+                    <option value="Outer">
+                    <option value="Accessories">
+                </datalist>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Koleksi (Pilih / Ketik Baru)</label>
+                <input list="collOptions" id="inputColl" class="form-control" placeholder="Pilih atau ketik...">
+                <datalist id="collOptions">
+                    <option value="Setala">
+                    <option value="Arkana">
+                    <option value="Kala">
+                    <option value="Aksata">
+                    <option value="Obi">
+                    <option value="Suar">
+                </datalist>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>User Type</label>
+                <select id="inputUser" class="form-control">
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Kids">Kids</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Harga Jual (Rp)</label>
+                <input type="number" id="inputPrice" class="form-control" placeholder="0">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Upload Gambar Katalog Utama</label>
+                <input type="file" id="inputImg" class="form-control" accept="image/*">
+                <small class="text-muted" id="currentImgLabel" style="display:none;">File saat ini: -</small>
+            </div>
+        </div>
+    </div>
+    
+    <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #eee;">
+    <h4>Varian Warna & Ukuran</h4>
+    <div id="variant-container">
+        </div>
+    <button class="btn btn-sm btn-outline" style="margin-top: 10px;" onclick="addVariantRow()">+ Tambah Warna Lain</button>
+    
+    <div class="btn-right">
+        <button class="btn btn-primary" onclick="nextProductStep()">Lanjut ke Material <i class="fas fa-arrow-right"></i></button>
+    </div>
+</div>
+
+            <div id="p-step-2" class="step-content">
+                <div class="alert-info">
+                    <i class="fas fa-lightbulb"></i> <strong>Info:</strong> Data teknis kain bisa dilewati dan dilengkapi oleh Tim PPIC nanti (Status: Waiting Specs).
+                </div>
+                <div id="recipe-container"></div>
+                <div class="btn-right">
+                    <button class="btn btn-secondary" onclick="prevProductStep()">Kembali</button>
+                    <button class="btn btn-outline" onclick="saveProduct(true)"><i class="fas fa-forward"></i> Simpan (Waiting Specs)</button>
+                    <button class="btn btn-success" onclick="saveProduct(false)"><i class="fas fa-save"></i> Simpan Lengkap</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+            <section id="custom-order" class="page-section hidden">
+    
+    <div id="co-monitoring-view">
+        <div class="action-bar" style="align-items: center;">
+            <div class="filters" style="flex: 1;">
+                <div style="position: relative; width: 300px;">
+                    <input type="text" id="coSearch" class="form-control" placeholder="Cari Nama Project / Klien..." onkeyup="renderCoMonitor()">
+                    <i class="fas fa-search" style="position: absolute; right: 10px; top: 12px; color: #ccc;"></i>
+                </div>
+
+                <select class="form-control" id="coFilterStatus" onchange="renderCoMonitor()" style="width: 180px;">
+                    <option value="all">Semua Status Aktif</option>
+                    <option value="Produksi">Sedang Produksi</option>
+                    <option value="Menunggu Kain">Menunggu Kain</option>
+                    <option value="Pattern">Pattern Making</option>
+                    <option value="Cutting">Cutting</option>
+                    <option value="history">Arsip / History Selesai</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" onclick="toggleCoView('form')">
+                <i class="fas fa-plus-circle"></i> Make New Custom Order
+            </button>
+        </div>
+
+        <div id="co-card-grid" class="co-card-grid"></div>
+        
+        <div id="co-empty-state" class="hidden" style="text-align: center; padding: 50px; color: #999;">
+            <i class="fas fa-box-open fa-3x" style="margin-bottom: 15px; opacity: 0.5;"></i>
+            <p>Tidak ada custom order yang ditemukan.</p>
+        </div>
+    </div>
+
+    <div id="co-form-view" class="hidden">
+        
+        <div style="margin-bottom: 15px;">
+            <button class="btn btn-sm btn-secondary" onclick="toggleCoView('monitor')">
+                <i class="fas fa-arrow-left"></i> Kembali ke Monitoring
+            </button>
+        </div>
+
+        <div class="card form-card">
+            <div class="card-header">
+                <h3>Input Custom Order Baru</h3>
+            </div>
+
+            <div class="step-indicator">
+                <div class="step active" data-step="1">1. Data Klien</div>
+                <div class="line"></div>
+                <div class="step" data-step="2">2. Produk & Qty</div>
+                <div class="line"></div>
+                <div class="step" data-step="3">3. Kebutuhan Material</div>
+            </div>
+
+            <div id="co-step-1" class="co-step active">
+                <h4>Informasi Pelanggan</h4>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Nama Customer</label>
+                            <input type="text" class="form-control" placeholder="Nama Lengkap">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Nama Project</label>
+                            <input type="text" class="form-control" placeholder="Misal: Seragam Gathering">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>No. Handphone / WA</label>
+                            <input type="text" class="form-control" placeholder="0812...">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" placeholder="email@contoh.com">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Alamat Pengiriman / Catatan</label>
+                    <textarea class="form-control" rows="2" placeholder="Alamat lengkap..."></textarea>
+                </div>
+                <div class="btn-right">
+                    <button class="btn btn-primary" onclick="coNextStep(2)">Lanjut <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <div id="co-step-2" class="co-step">
+                <h4>Detail Produk & Kuantitas</h4>
+                <div id="co-products-container">
+                    
+                </div>
+                
+                <button class="btn btn-outline full-width" style="margin-top:10px; border-style: dashed;" onclick="addCoProductCard()">
+                    <i class="fas fa-plus-circle"></i> Tambah Produk Lain (Multi-Item)
+                </button>
+
+                <div class="btn-right">
+                    <button class="btn btn-secondary" onclick="coNextStep(1)">Kembali</button>
+                    <button class="btn btn-primary" onclick="coNextStep(3)">Lanjut ke Bahan <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <div id="co-step-3" class="co-step">
+    <div class="alert-info" style="margin-bottom: 20px;">
+        <i class="fas fa-info-circle"></i> Sistem mendeteksi detail produk & warna dari Step 2. Silakan lengkapi kebutuhan material untuk setiap varian di bawah ini.
+    </div>
+
+    <div id="co-materials-container">
+        </div>
+
+    <div class="btn-right" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+        <button class="btn btn-secondary" onclick="coNextStep(2)">Kembali</button>
+        <button class="btn btn-success" onclick="finishCustomOrder()">
+            <i class="fas fa-check-circle"></i> Submit Order
+        </button>
+    </div>
+</div>
+
+        </div>
+    </div>
+</section>
+
+
+        </main>
+    </div>
+
+    
+<div id="viewDetailModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('viewDetailModal')">&times;</span>
+        <h3>Detail Produk</h3>
+        <div style="text-align:center; margin: 20px 0;">
+            <img id="detailImg" src="" style="width:100px; height:100px; object-fit:cover; border-radius:8px; border:1px solid #eee;">
+        </div>
+        
+        <div class="detail-row"><span class="detail-label">Nama Produk</span> <span class="detail-val" id="detailName">-</span></div>
+        <div class="detail-row"><span class="detail-label">SKU</span> <span class="detail-val" id="detailSku">-</span></div>
+        <div class="detail-row"><span class="detail-label">Kategori</span> <span class="detail-val" id="detailCat">-</span></div>
+        <div class="detail-row"><span class="detail-label">Koleksi</span> <span class="detail-val" id="detailColl">-</span></div>
+        <div class="detail-row"><span class="detail-label">User Type</span> <span class="detail-val" id="detailUser">-</span></div>
+        <div class="detail-row"><span class="detail-label">Harga</span> <span class="detail-val text-primary" id="detailPrice">-</span></div>
+        
+        <h4 style="margin-top:20px; font-size:0.95rem;">List Varian</h4>
+        <div id="detailVariantList" style="background:#f9f9f9; padding:10px; border-radius:8px; margin-top:5px; font-size:0.9rem;">
+            </div>
+    </div>
+</div>
+
+
+
+
+<div id="orderDetailModal" class="modal hidden">
+    <div class="modal-content wide">
+        <span class="close-btn" onclick="closeModal('orderDetailModal')">&times;</span>
+        
+        <div class="modal-header-border" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+                <h3 id="detId" style="color:var(--primary);">#CUST-000</h3>
+                <small class="text-muted" id="detDate">Tgl Order: -</small>
+            </div>
+            <span class="badge badge-primary" id="detStatus" style="font-size: 0.9rem; padding: 5px 12px;">Status</span>
+        </div>
+
+        <div class="detail-grid-box" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+            <div>
+                <h5 style="color: #555; margin-bottom: 8px; border-bottom: 1px dashed #ccc; padding-bottom: 5px;">Data Klien</h5>
+                <div class="info-row"><span>Nama:</span> <strong id="detClientName">-</strong></div>
+                <div class="info-row"><span>Kontak:</span> <span id="detContact">-</span></div>
+                <div class="info-row"><span>Email:</span> <span id="detEmail">-</span></div>
+            </div>
+            <div>
+                <h5 style="color: #555; margin-bottom: 8px; border-bottom: 1px dashed #ccc; padding-bottom: 5px;">Data Project</h5>
+                <div class="info-row"><span>Project:</span> <strong id="detProject">-</strong></div>
+                <div class="info-row"><span>Deadline:</span> <strong class="text-danger" id="detDeadline">-</strong></div>
+                <div class="info-row"><span>Alamat:</span> <span id="detAddress">-</span></div>
+            </div>
+        </div>
+
+        <h4 style="margin-top: 20px; margin-bottom: 10px;">Item Order & Kuantitas</h4>
+        <div id="detProductList">
+            </div>
+
+        <h4 style="margin-top: 20px; margin-bottom: 10px;">Kebutuhan Material</h4>
+        <div class="card" style="box-shadow: none; border: 1px solid #eee; padding: 15px;">
+            <div id="detFabricInfo">
+                </div>
+            <div id="detSupportMaterial" class="mt-2">
+                </div>
+        </div>
+
+        <div class="btn-right mt-3">
+            <button class="btn btn-secondary" onclick="closeModal('orderDetailModal')">Tutup</button>
+            <button class="btn btn-primary" onclick="alert('Masuk ke mode Edit Order...')"><i class="fas fa-edit"></i> Edit Order</button>
+        </div>
+    </div>
+</div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbound - Staf Penerimaan ABC</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="qc-style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="../gambar/logoputihnobg.png" alt="Dama Kara" class="sidebar-logo">
+            </div>
+            <ul class="nav-links">
+                <li class="active" id="nav-active" onclick="switchPage('active')">
+                    <a href="#">
+                        <i class="fas fa-clipboard-list"></i> 
+                        <span class="link-text">Work Order</span>
+                    </a>
+                </li>
+                <li id="nav-history" onclick="switchPage('history')">
+                    <a href="#">
+                        <i class="fas fa-history"></i> 
+                        <span class="link-text">Riwayat Log</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <li onclick="window.location.href='qc-login.html'">
+                    <a href="#">
+                        <i class="fas fa-sign-out-alt"></i> 
+                        <span class="link-text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div>
+                    <h2 id="pageTitle">Inbound & QC Portal</h2>
+                    <p class="subtitle" style="margin-top: 0; color: #7f8c8d;">Kelola kedatangan barang dari vendor</p>
+                </div>
+                <div class="user-profile">
+                    <div style="text-align: right;">
+                        <span style="display:block; font-weight:600;">Staf Gudang</span>
+                        <span class="badge badge-process" style="font-size: 0.7rem;">Inbound</span>
+                    </div>
+                    <div class="avatar">QC</div>
+                </div>
+            </header>
+
+            <div id="view-active">
+                <section class="controls-section">
+                    <div class="filter-tabs">
+                        <button class="filter-btn active" onclick="filterWO('all')">Semua</button>
+                        <button class="filter-btn" onclick="filterWO('jahit')">WO Jahit</button>
+                        <button class="filter-btn" onclick="filterWO('kain')">WO Kain</button>
+                    </div>
+
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Cari No. WO..." onkeyup="searchWO()">
+                    </div>
+                </section>
+
+                <section class="wo-grid" id="woGrid"></section>
+            </div>
+
+            <div id="view-history" style="display: none;">
+                <section class="controls-section" style="flex-wrap: wrap; gap: 15px;">
+                    <div class="filter-tabs">
+                        <button class="filter-btn active" onclick="filterHistory('all', this)">Semua</button>
+                        <button class="filter-btn" onclick="filterHistory('jahit', this)">WO Jahit</button>
+                        <button class="filter-btn" onclick="filterHistory('kain', this)">WO Kain</button>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; align-items: center; background: white; padding: 5px 15px; border-radius: 30px; border: 1px solid #ddd;">
+                        <label style="font-size: 12px; color: #666;">Filter Tgl:</label>
+                        <input type="date" id="histStart" onchange="renderHistory()" style="border: none; outline: none; font-size: 13px;">
+                        <span style="color: #ccc;">s/d</span>
+                        <input type="date" id="histEnd" onchange="renderHistory()" style="border: none; outline: none; font-size: 13px;">
+                    </div>
+                </section>
+
+                <section class="wo-grid" id="historyGrid"></section>
+            </div>
+        </main>
+    </div>
+
+    <div id="woModal" class="modal">
+        <div class="modal-content large-modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            
+            <div class="modal-header-custom">
+                <div>
+                    <h3 id="modalWoTitle">WO-2025-XXX</h3>
+                    <p id="modalVendor" class="text-muted">Vendor: -</p>
+                </div>
+                <div id="modalStatusBadge" class="status-badge">Status</div>
+            </div>
+
+            <div class="modal-body">
+                <div class="info-grid">
+                    <div class="info-card"><label>Tanggal Order</label><span id="modalDate">-</span></div>
+                    <div class="info-card"><label>Estimasi Tiba</label><span id="modalExpected">-</span></div>
+                    <div class="info-card"><label>Tipe Order</label><span id="modalType">-</span></div>
+                    <div class="info-card"><label>Alamat Vendor</label><span id="modalAddress">-</span></div>
+                </div>
+                <hr class="divider">
+                <h4 style="margin-bottom: 15px;">Detail Item & QC</h4>
+                <div id="modalItemsContainer"></div>
+            </div>
+
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <script src="qc-script.js"></script>
+</body>
+</html>

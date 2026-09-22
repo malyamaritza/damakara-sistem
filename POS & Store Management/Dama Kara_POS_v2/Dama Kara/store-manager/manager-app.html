@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard - Batik ABC</title>
+    <link rel="stylesheet" href="manager-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+</head>
+<body>
+
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="../gambar/logoputihnobg.png" alt="Dama Kara" class="sidebar-logo">
+            </div>
+            <ul class="nav-links">
+                <li class="active" onclick="showPage('dashboard')" data-label="Dashboard">
+                    <a href="#"><i class="fas fa-chart-pie"></i> <span class="link-text">Dashboard</span></a>
+                </li>
+                <li onclick="showPage('inventory')" data-label="Stok Store">
+                    <a href="#"><i class="fas fa-boxes"></i> <span class="link-text">Stok Store</span></a>
+                </li>
+                <li onclick="showPage('restock')" data-label="Restock">
+                    <a href="#"><i class="fas fa-truck-loading"></i> <span class="link-text">Restock</span></a>
+                </li>
+                <li onclick="showPage('discount')" data-label="Diskon">
+                    <a href="#"><i class="fas fa-tags"></i> <span class="link-text">Diskon</span></a>
+                </li>
+                <li onclick="showPage('reports')" data-label="Laporan">
+                    <a href="#"><i class="fas fa-file-invoice-dollar"></i> <span class="link-text">Laporan</span></a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <li onclick="window.location.href='manager-login.html'" data-label="Logout">
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> <span class="link-text">Logout</span></a>
+                </li>
+            </div>
+        </nav>
+
+        <main class="content">
+            <header class="top-bar">
+                <h2 id="pageTitle">Dashboard Ringkasan</h2>
+                <div class="user-info">
+                    <div style="text-align: right; margin-right: 10px;">
+                        <span style="display:block; font-weight:600;">Andi Pratama</span>
+                        <span class="badge-role">Kepala Store</span>
+                    </div>
+                    <div class="avatar-circle"><i class="fas fa-user"></i></div>
+                </div>
+            </header>
+
+            <section id="dashboard" class="page-section">
+                <div class="cards-grid">
+                    <div class="card summary-card">
+                        <div class="icon-box"><i class="fas fa-coins"></i></div>
+                        <div><p>Penjualan Hari Ini</p><h3>Rp 12.500.000</h3></div>
+                    </div>
+                    <div class="card summary-card">
+                        <div class="icon-box"><i class="fas fa-receipt"></i></div>
+                        <div><p>Total Transaksi</p><h3>45 Trx</h3></div>
+                    </div>
+                    <div class="card summary-card">
+                        <div class="icon-box warning"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div><p>Stok Perlu Restock</p><h3 class="text-danger">5 SKU</h3></div>
+                    </div>
+                    <div class="card summary-card">
+                        <div class="icon-box"><i class="fas fa-truck"></i></div>
+                        <div><p>Restock On-Process</p><h3>2 Order</h3></div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid-2">
+                    <div class="card">
+                        <h4>Grafik Penjualan Bulan Ini</h4>
+                        <div class="chart-wrapper" style="height: 200px; position: relative;">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="vertical-stack">
+                        <div class="card">
+                            <h4>Rangkuman Shift Hari Ini</h4>
+                            <table class="simple-table">
+                                <tr><td>Shift 1 (Pagi)</td><td class="text-right text-success"><strong>OK (Selisih 0)</strong></td></tr>
+                                <tr><td>Shift 2 (Siang)</td><td class="text-right text-muted">Sedang Berjalan</td></tr>
+                            </table>
+                        </div>
+                        <div class="card">
+                            <h4>Status Event Diskon</h4>
+                            <div class="list-item">
+                                <span><i class="fas fa-tag text-primary"></i> Promo Gajian</span>
+                                <span class="badge success">Aktif</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card mt-3">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h4><i class="fas fa-crown text-warning"></i> Top 5 Produk Terlaris</h4>
+        <select id="filterTopProd" class="input-field small-input" style="width: 150px;" onchange="renderTopProducts()">
+            <option value="daily">Hari Ini</option>
+            <option value="weekly">Minggu Ini</option>
+            <option value="monthly">Bulan Ini</option>
+        </select>
+    </div>
+
+    <div class="table-responsive">
+        <table class="simple-table" style="margin-top: 0;">
+            <thead>
+                <tr>
+                    <th width="10%">Peringkat</th>
+                    <th width="40%">Produk</th>
+                    <th width="30%">Performa Penjualan</th>
+                    <th width="20%" class="text-right">Total Terjual</th>
+                </tr>
+            </thead>
+            <tbody id="topProductsList">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+</section>
+            </section>
+
+            <section id="inventory" class="page-section hidden">
+                <div class="toolbar" style="display: block;"> <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+        <div class="group-left">
+            <button class="btn-primary" onclick="openAddProductModal()"><i class="fas fa-plus"></i> Item Baru</button>
+            <button class="btn-outline" onclick="createRestockFromSelection()"><i class="fas fa-cart-plus"></i> Buat Restock Order</button>
+        </div>
+        
+        <div class="search-wrapper">
+            <input type="text" id="searchStock" placeholder="Cari SKU / Nama Produk..." class="input-field" style="width: 250px;" onkeyup="filterStock()">
+        </div>
+    </div>
+
+    <div class="filter-row" style="display: flex; gap: 10px; flex-wrap: wrap; background: #fff; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
+        
+        <div style="display: flex; flex-direction: column; gap: 5px; flex: 1;">
+            <label style="font-size: 0.75rem; font-weight: 600; color: #888;">Status Stok</label>
+            <select id="filterStatus" class="input-field" onchange="filterStock()" style="padding: 8px;">
+                <option value="all">Semua Status</option>
+                <option value="low">Stok Menipis (!)</option>
+                <option value="empty">Habis (0)</option>
+                <option value="safe">Aman</option>
+            </select>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 5px; flex: 1;">
+            <label style="font-size: 0.75rem; font-weight: 600; color: #888;">Tipe User</label>
+            <select id="filterInvUser" class="input-field" onchange="filterStock()" style="padding: 8px;">
+                <option value="all">Semua</option>
+                <option value="Men">Men</option>
+                <option value="Women">Women</option>
+                <option value="Kids">Kids</option>
+            </select>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 5px; flex: 1;">
+            <label style="font-size: 0.75rem; font-weight: 600; color: #888;">Koleksi</label>
+            <select id="filterInvCollection" class="input-field" onchange="filterStock()" style="padding: 8px;">
+                <option value="all">Semua Koleksi</option>
+                <option value="Setala">Setala</option>
+                <option value="Arkana">Arkana</option>
+                <option value="Kala">Kala</option>
+                <option value="Aksata">Aksata</option>
+                <option value="Obi">Obi</option>
+                <option value="Suar">Suar</option>
+            </select>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 5px; flex: 1;">
+            <label style="font-size: 0.75rem; font-weight: 600; color: #888;">Kategori</label>
+            <select id="filterInvCategory" class="input-field" onchange="filterStock()" style="padding: 8px;">
+                <option value="all">Semua Kategori</option>
+                <option value="Shirt">Shirt</option>
+                <option value="Tunik">Tunik</option>
+                <option value="Outer">Outer</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+        </div>
+
+    </div>
+</div>
+
+                <div class="card table-card mt-3">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th width="5%"><input type="checkbox" id="selectAllInv" onclick="toggleSelectAllInv()"></th>
+                                <th>Produk Info</th>
+                                <th>Total Stok</th>
+                                <th>Indikator</th>
+                                <th>Status Katalog</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="restock" class="page-section hidden">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchRestockTab('active', event)">Sedang Berjalan</button>
+                    <button class="tab-btn" onclick="switchRestockTab('history', event)">Riwayat Restock</button>
+                </div>
+
+                <div id="restockActiveContent">
+                    <div class="toolbar mt-3">
+                        <button class="btn-primary" onclick="openCreateRestockModal()"><i class="fas fa-paper-plane"></i> Buat Order Baru</button>
+                    </div>
+                    <div class="restock-grid mt-3" id="activeRestockList">
+                    </div>
+                </div>
+
+                <div id="restockHistoryContent" class="hidden">
+                    <div class="toolbar mt-3" style="justify-content: flex-end;">
+                        <input type="date" id="filterRestockDate" onchange="filterRestockHistory()">
+                    </div>
+                    <div class="card table-card mt-3">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID Order</th><th>Tanggal Selesai</th><th>Total Item</th><th>Status</th><th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyRestockTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="discount" class="page-section hidden">
+                <div class="card">
+                    <div class="form-header-split">
+                        <h3><i class="fas fa-percentage"></i> Buat Event Diskon Baru</h3>
+                        <button class="btn-text text-primary">Lihat Event Aktif ></button>
+                    </div>
+                    
+                    <form id="discountForm">
+                        <div class="row">
+                            <div class="form-group half">
+                                <label>Nama Event Promo</label>
+                                <input type="text" placeholder="Contoh: Promo Lebaran Sale" class="input-field" required>
+                            </div>
+                            <div class="form-group quarter">
+                                <label>Tanggal Mulai</label>
+                                <input type="date" class="input-field" required>
+                            </div>
+                            <div class="form-group quarter">
+                                <label>Tanggal Selesai</label>
+                                <input type="date" class="input-field" required>
+                            </div>
+                        </div>
+                        
+                        <div class="section-divider">Aturan Diskon</div>
+                        
+                        <div id="discountRulesContainer">
+    <div class="rule-box" id="rule-initial"> <div class="rule-header">
+            <h4>Aturan #1</h4>
+            </div>
+        <div class="row">
+            <div class="form-group quarter">
+                <label>Tipe Potongan</label>
+                <select class="input-field">
+                    <option>Persentase (%)</option>
+                    <option>Nominal (Rp)</option>
+                </select>
+            </div>
+            <div class="form-group quarter">
+                <label>Nilai Diskon</label>
+                <input type="number" placeholder="Contoh: 10" class="input-field">
+            </div>
+            
+            <div class="form-group half">
+                <label>Target Produk</label>
+                <button type="button" class="btn-outline full-width" 
+                        style="justify-content:space-between; text-align:left; border-color:#ccc; color:#555;" 
+                        onclick="openDiscountProductModal('rule-initial')">
+                    <span><i class="fas fa-search"></i> Pilih Produk / Varian...</span>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="selected-items-container" id="selected-container-rule-initial">
+            <span class="text-muted" style="font-size:0.85rem; padding:5px;">Belum ada produk dipilih.</span>
+        </div>
+    </div>
+</div>
+
+                        <div class="form-actions mt-3">
+                            <button type="button" class="btn-outline" onclick="addDiscountRule()">+ Tambah Aturan Lain</button>
+                            <button type="submit" class="btn-primary" onclick="alert('Event Diskon Berhasil Disimpan!')">Simpan Event Diskon</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="reports" class="page-section hidden">
+                <div class="report-header-card">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchReportTab('daily', event)">Laporan Harian</button>
+                        <button class="tab-btn" onclick="switchReportTab('monthly', event)">Laporan Bulanan</button>
+                        <button class="tab-btn" onclick="switchReportTab('yearly', event)">Laporan Tahunan</button>
+                    </div>
+                    <button class="btn-outline" onclick="exportReportPDF()"><i class="fas fa-file-pdf"></i> Ekspor PDF</button>
+                </div>
+
+                <div class="card table-card mt-3">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Periode / Waktu</th>
+                                <th>Total Transaksi</th>
+                                <th>Pendapatan (Omzet)</th>
+                                <th>Total Diskon</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="productDetailModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('productDetailModal')">&times;</span>
+            <h3>Detail Stok Produk</h3>
+            <div class="product-header-info mt-2">
+                <h2 id="detailProdName">Nama Produk</h2>
+                <p id="detailProdSku" class="text-muted">SKU: -</p>
+            </div>
+            
+            <table class="simple-table mt-3">
+                <thead><tr><th>Varian (Warna - Size)</th><th>Stok</th><th>Status</th></tr></thead>
+                <tbody id="detailVariantTable"></tbody>
+            </table>
+
+            <div class="form-group mt-3">
+                <label>Status Katalog Produk:</label>
+                <select id="editProdStatus" class="input-field">
+                    <option value="Active">Aktif (Dijual)</option>
+                    <option value="Inactive">Non-Aktif (Arsip)</option>
+                </select>
+            </div>
+            <button class="btn-primary full-width mt-3" onclick="saveProductStatus()">Simpan Perubahan</button>
+        </div>
+    </div>
+
+    <div id="addItemModal" class="modal hidden">
+        <div class="modal-content wide">
+            <span class="close-btn" onclick="closeModal('addItemModal')">&times;</span>
+            <h3>Tambah Item Baru ke Store</h3>
+            <div class="row mt-3">
+                <div class="form-group half">
+                    <label>Scan Barcode / Input SKU</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="text" placeholder="Scan here..." class="input-field" id="newItemSku">
+                        <button class="btn-outline" onclick="alert('Simulasi Scan Barcode...')"><i class="fas fa-barcode"></i></button>
+                    </div>
+                </div>
+                <div class="form-group half">
+                    <label>Nama Produk</label>
+                    <input type="text" class="input-field" id="newItemName" placeholder="Contoh: Kemeja Batik...">
+                </div>
+            </div>
+            
+            <div class="section-divider mt-2">Stok Awal Varian</div>
+            <div id="newVariantInputs">
+                <div class="row mt-2 variant-row">
+                    <input type="text" placeholder="Warna" class="input-field quarter">
+                    <input type="text" placeholder="Size" class="input-field quarter">
+                    <input type="number" placeholder="Qty Awal" class="input-field quarter">
+                    <button class="btn-text text-danger" onclick="alert('Baris pertama wajib ada')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <button class="btn-outline full-width mt-2" onclick="addNewVariantRow()">+ Tambah Varian Lain</button>
+            <button class="btn-primary full-width mt-3" onclick="submitNewItem()">Konfirmasi & Simpan Produk</button>
+        </div>
+    </div>
+
+    <div id="createRestockModal" class="modal hidden">
+        <div class="modal-content wide">
+            <span class="close-btn" onclick="closeModal('createRestockModal')">&times;</span>
+            <h3>Buat Restock Order Baru</h3>
+            
+            <div class="form-group mt-2">
+                <label>Cari & Tambah Produk Lain:</label>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-outline full-width" style="justify-content: flex-start; color: #555; border-color: #ddd;" onclick="openAddMoreModal()">
+                        <i class="fas fa-search"></i> &nbsp; Klik untuk memilih produk dari Katalog...
+                    </button>
+                    <button class="btn-primary" onclick="openAddMoreModal()"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div id="restockFormContainer" class="mt-3" style="max-height: 400px; overflow-y: auto; padding-right: 5px; border: 1px solid #eee; border-radius: 8px; padding: 10px; background: #fcfcfc;">
+                <p class="text-muted text-center mt-3 mb-3">Belum ada produk dipilih.</p>
+            </div>
+            
+            <div class="section-divider mt-3">Detail Pengiriman</div>
+            <div class="form-group">
+                <label>Expected Date (Estimasi Sampai):</label>
+                <input type="date" class="input-field">
+            </div>
+            <button class="btn-primary full-width mt-3" onclick="submitRestock()">Kirim Permintaan Restock</button>
+        </div>
+    </div>
+
+    <div id="addProductRestockModal" class="modal hidden" style="z-index: 1050;">
+        <div class="modal-content wide">
+            <span class="close-btn" onclick="closeModal('addProductRestockModal')">&times;</span>
+            <h3>Pilih Produk untuk Restock</h3>
+            <div class="toolbar mt-2">
+                <input type="text" id="searchAddRestock" class="input-field" placeholder="Cari nama produk..." onkeyup="renderAddRestockTable()">
+            </div>
+            <div class="card table-card mt-3" style="max-height: 350px; overflow-y: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th width="5%"><input type="checkbox"></th>
+                            <th>Info Produk</th>
+                            <th>Total Stok</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="addRestockTableBody">
+                        </tbody>
+                </table>
+            </div>
+            <button class="btn-primary full-width mt-3" onclick="confirmAddProducts()">+ Tambahkan Produk Terpilih</button>
+        </div>
+    </div>
+
+    <div id="receiveRestockModal" class="modal hidden">
+        <div class="modal-content wide">
+            <span class="close-btn" onclick="closeModal('receiveRestockModal')">&times;</span>
+            <div class="modal-header-border">
+                <h3>Penerimaan Barang <span id="receiveOrderId">#RO-000</span></h3>
+                <span class="badge warning" id="receiveStatusBadge">Shipping</span>
+            </div>
+            
+            <div class="form-group mt-2">
+                <label>Tanggal Diterima:</label>
+                <input type="date" id="receiveDateInput" class="input-field">
+            </div>
+
+            <div class="section-divider mt-3">Detail Barang Masuk</div>
+            
+            <div id="receiveItemsContainer" class="mt-2" style="max-height: 350px; overflow-y: auto; padding-right: 5px;">
+                </div>
+
+            <div id="receiveActionArea" class="hidden mt-3">
+                <div class="form-group">
+                    <label>Catatan Penerimaan:</label>
+                    <textarea id="receiveNotes" class="input-field" placeholder="Contoh: Barang lengkap, kondisi box aman..."></textarea>
+                </div>
+                <button class="btn-primary full-width mt-3" onclick="confirmReceive()">Konfirmasi Terima & Update Stok</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="reportDetailModal" class="modal hidden">
+        <div class="modal-content wide">
+            <span class="close-btn" onclick="closeModal('reportDetailModal')">&times;</span>
+            <h3>Detail Laporan <span id="reportPeriodTitle">Harian</span></h3>
+            <p class="text-muted" id="reportDateSubtitle">Tanggal: 25 Oktober 2025</p>
+            
+            <div class="report-summary-boxes mt-3">
+                <div class="summ-box">
+                    <small>Total Pendapatan</small>
+                    <strong class="text-primary" id="repTotalRev">Rp 0</strong>
+                </div>
+                <div class="summ-box">
+                    <small>Cash</small>
+                    <strong id="repCash">Rp 0</strong>
+                </div>
+                <div class="summ-box">
+                    <small>Digital/QRIS</small>
+                    <strong id="repDigital">Rp 0</strong>
+                </div>
+                <div class="summ-box">
+                    <small>Total Diskon</small>
+                    <strong class="text-danger" id="repDiscount">Rp 0</strong>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="half">
+                    <h4>Top Produk Terjual</h4>
+                    <table class="simple-table table-stripe">
+                        <tbody id="topProductsTable">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="half">
+                    <h4>Distribusi Pembayaran</h4>
+                    <div style="height: 150px; display:flex; justify-content:center; align-items:center; background:#f9f9f9; border-radius:8px;">
+                        <span class="text-muted">Grafik Pie Chart (Simulasi)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-3 text-right">
+                <button class="btn-outline" onclick="closeModal('reportDetailModal')">Tutup</button>
+                <button class="btn-primary" onclick="exportReportPDF()">Download Detail PDF</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="historyDetailModal" class="modal hidden">
+        <div class="modal-content wide">
+            <span class="close-btn" onclick="closeModal('historyDetailModal')">&times;</span>
+            <div class="modal-header-border">
+                <h3>Riwayat Restock <span id="histOrderId">#RO-000</span></h3>
+                <span class="badge success" id="histStatusBadge">Completed</span>
+            </div>
+
+            <div class="row mt-2" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                <div class="half">
+                    <small class="text-muted">Tanggal Diterima:</small><br>
+                    <strong id="histDateReceived">-</strong>
+                </div>
+                <div class="half">
+                    <small class="text-muted">Total Item:</small><br>
+                    <strong id="histTotalItems">0 Pcs</strong>
+                </div>
+            </div>
+
+            <h4 class="mt-3">Rincian Barang Masuk</h4>
+            <div class="card table-card mt-2" style="max-height: 300px; overflow-y: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Produk</th>
+                            <th>Varian</th>
+                            <th class="text-center">Req Qty</th>
+                            <th class="text-center">Received Qty</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="histDetailTableBody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="mt-3 text-right">
+                <button class="btn-primary" onclick="closeModal('historyDetailModal')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="selectProductDiscountModal" class="modal hidden" style="z-index: 1100;">
+    <div class="modal-content wide">
+        <span class="close-btn" onclick="closeModal('selectProductDiscountModal')">&times;</span>
+        <h3>Pilih Produk Target Diskon</h3>
+        <p class="text-muted">Gunakan filter untuk mempersempit pencarian produk.</p>
+        
+        <div class="filter-row mt-2" style="display: flex; gap: 10px; background: #f8f9fa; padding: 10px; border-radius: 8px; border: 1px solid #eee;">
+            <select id="discFilterUser" class="input-field" style="padding: 8px; font-size: 0.9rem;" onchange="renderDiscountProductList()">
+                <option value="all">Semua User</option>
+                <option value="Men">Men</option>
+                <option value="Women">Women</option>
+                <option value="Kids">Kids</option>
+            </select>
+            <select id="discFilterColl" class="input-field" style="padding: 8px; font-size: 0.9rem;" onchange="renderDiscountProductList()">
+                <option value="all">Semua Koleksi</option>
+                <option value="Setala">Setala</option>
+                <option value="Arkana">Arkana</option>
+                <option value="Kala">Kala</option>
+                <option value="Aksata">Aksata</option>
+                <option value="Obi">Obi</option>
+                <option value="Suar">Suar</option>
+            </select>
+            <select id="discFilterCat" class="input-field" style="padding: 8px; font-size: 0.9rem;" onchange="renderDiscountProductList()">
+                <option value="all">Semua Kategori</option>
+                <option value="Shirt">Shirt</option>
+                <option value="Tunik">Tunik</option>
+                <option value="Outer">Outer</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+        </div>
+
+        <div class="toolbar mt-2">
+            <input type="text" id="searchDiscountProduct" class="input-field full-width" placeholder="Cari nama produk atau SKU..." onkeyup="renderDiscountProductList()">
+        </div>
+
+        <div id="discountProductListContainer" class="mt-3" style="max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px;">
+            </div>
+
+        <button class="btn-primary full-width mt-3" onclick="confirmDiscountProductSelection()">Simpan Pilihan Produk</button>
+    </div>
+</div>
+
+    <script src="manager-script.js"></script>
+</body>
+</html>

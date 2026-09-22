@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Dashboard - Dama Kara</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="owner-style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <nav class="sidebar">
+    <div class="sidebar-header">
+        <img src="../gambar/logoputihnobg.png" alt="DK" class="sidebar-logo">
+    </div>
+    <ul class="nav-links">
+        <li class="active" onclick="showPage('dashboard')" id="nav-dashboard">
+            <a href="#"><i class="fas fa-chart-line"></i> <span class="link-text">Overview</span></a>
+        </li>
+        <li onclick="showPage('sales')" id="nav-sales">
+            <a href="#"><i class="fas fa-wallet"></i> <span class="link-text">Sales & Profit</span></a>
+        </li>
+        <li onclick="showPage('inventory')" id="nav-inventory">
+            <a href="#"><i class="fas fa-boxes"></i> <span class="link-text">Inventory Health</span></a>
+        </li>
+        <li onclick="showPage('production')" id="nav-production">
+            <a href="#"><i class="fas fa-industry"></i> <span class="link-text">Production</span></a>
+        </li>
+        <li onclick="showPage('vendor')" id="nav-vendor">
+            <a href="#"><i class="fas fa-handshake"></i> <span class="link-text">Vendor Grade</span></a>
+        </li>
+    </ul>
+    <div class="sidebar-footer">
+        <li onclick="window.location.href='owner-login.html'">
+            <a href="#"><i class="fas fa-sign-out-alt"></i> <span class="link-text">Logout</span></a>
+        </li>
+    </div>
+</nav>
+        <main class="content">
+            <header class="top-bar">
+                <h2 id="pageTitle">Executive Overview</h2>
+                <div class="user-profile">
+                    <div style="text-align: right;">
+                        <span style="display:block; font-weight:600;">Ibu Owner</span>
+                        <span class="badge-role">Executive</span>
+                    </div>
+                    <div class="avatar"><i class="fas fa-user-tie"></i></div>
+                </div>
+            </header>
+
+            <section id="dashboard" class="page-section">
+                <div class="kpi-grid">
+                    <div class="card kpi-card">
+                        <div class="icon-box info"><i class="fas fa-coins"></i></div>
+                        <div>
+                            <p>Total Pendapatan (Bulan Ini)</p>
+                            <h3 id="dash-revenue">Rp 0</h3>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> +12% vs bulan lalu</small>
+                        </div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="icon-box warning"><i class="fas fa-shopping-cart"></i></div>
+                        <div>
+                            <p>Produk Terjual</p>
+                            <h3 id="dash-sold">0 Pcs</h3>
+                        </div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="icon-box danger"><i class="fas fa-tags"></i></div>
+                        <div>
+                            <p>Pengeluaran Diskon</p>
+                            <h3 id="dash-discount">Rp 0</h3>
+                        </div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="icon-box primary"><i class="fas fa-cogs"></i></div>
+                        <div>
+                            <p>Produksi Berjalan (WO)</p>
+                            <h3 id="dash-active-wo">0</h3>
+                            <small>Project & Reguler</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-8">
+                        <div class="card" style="height: 100%;">
+                            <div class="card-header-flex">
+                                <h4>Tren Penjualan (Omzet)</h4>
+                                <select class="filter-select" onchange="updateMainChart(this.value)">
+                                    <option value="monthly">Bulanan (2025)</option>
+                                    <option value="weekly">Mingguan</option>
+                                </select>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card" style="height: 100%;">
+                            <h4>Top 5 Produk Terlaris</h4>
+                            <div id="top-products-list" class="top-list-container">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sales" class="page-section hidden">
+                <div class="toolbar">
+                    <div class="filter-group">
+                        <select id="filter-sales-channel" class="input-modern" onchange="renderSalesMonitor()">
+                            <option value="all">Semua Channel</option>
+                            <option value="online">Online (Jubelio/Web)</option>
+                            <option value="store_bdg">Store Bandung</option>
+                            <option value="store_jkt">Store Jakarta</option>
+                            <option value="event">Event / Bazaar</option>
+                        </select>
+                        <select id="filter-sales-period" class="input-modern" onchange="renderSalesMonitor()">
+                            <option value="this_month">Bulan Ini</option>
+                            <option value="last_month">Bulan Lalu</option>
+                            <option value="year">Tahun Ini (YTD)</option>
+                        </select>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="filter-defect" onchange="renderSalesMonitor()">
+                            <span class="slider"></span>
+                            <span class="label-text">Tampilkan Barang Defect Sale</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-3">
+                        <div class="card finance-mini">
+                            <small>Omzet Kotor</small>
+                            <h3 id="fin-gross">Rp 0</h3>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card finance-mini">
+                            <small>Diskon / Potongan</small>
+                            <h3 class="text-danger" id="fin-disc">Rp 0</h3>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card finance-mini">
+                            <small>Pendapatan Bersih</small>
+                            <h3 class="text-success" id="fin-net">Rp 0</h3>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card finance-mini">
+                            <small>Margin (Est)</small>
+                            <h3 class="text-primary" id="fin-margin">0%</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card table-card">
+                    <div class="card-header-flex">
+                        <h4>Rincian Penjualan Akumulatif</h4>
+                        <button class="btn-outline" onclick="alert('Download CSV report...')"><i class="fas fa-download"></i> Export</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Produk</th>
+                                <th>Kategori</th>
+                                <th>Channel</th>
+                                <th class="text-center">Terjual</th>
+                                <th class="text-right">Total (Rp)</th>
+                                <th>Tipe</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sales-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="inventory" class="page-section hidden">
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <div class="card finance-mini">
+                            <p class="text-muted">Total Aset Gudang (Valuasi)</p>
+                            <h2 id="inv-total-asset" style="color: var(--primary);">Rp 0</h2>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card finance-mini">
+                            <p class="text-muted">Total Item Fisik</p>
+                            <h2 id="inv-total-qty">0 Pcs</h2>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card finance-mini">
+                            <p class="text-muted">Status Stok SKU</p>
+                            <div style="display:flex; justify-content:center; gap:15px; margin-top:5px;">
+                                <span class="badge success" id="inv-healthy-count">0 Aman</span>
+                                <span class="badge danger" id="inv-low-count">0 Low</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 20px; padding: 20px;">
+                    <div class="filter-group-row">
+                        
+                        <div class="filter-item">
+                            <label>Fokus Lokasi</label>
+                            <select class="input-modern" id="filterLocation" onchange="renderInventory()">
+                                <option value="all">View All (General)</option>
+                                <option value="gudang">Fokus Gudang (Inbound/ATP)</option>
+                                <option value="store">Fokus Sebaran Luar (Store/Event)</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-item">
+                            <label>Koleksi</label>
+                            <select class="input-modern" id="filterCollection" onchange="renderInventory()">
+                                <option value="all">Semua Koleksi</option>
+                                <option value="Setala">Setala</option>
+                                <option value="Kala">Kala</option>
+                                <option value="Arkana">Arkana</option>
+                                <option value="Aksata">Aksata</option>
+                                <option value="Obi">Obi</option>
+                                <option value="Suar">Suar</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-item">
+                            <label>Kategori</label>
+                            <select class="input-modern" id="filterCategory" onchange="renderInventory()">
+                                <option value="all">Semua Kategori</option>
+                                <option value="Shirt">Shirt</option>
+                                <option value="Outer">Outer</option>
+                                <option value="Accessories">Accessories</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-item">
+                            <label>Status</label>
+                            <select class="input-modern" id="filterProductStatus" onchange="renderInventory()">
+                                <option value="active" selected>Aktif</option>
+                                <option value="discontinued">Non-Aktif</option>
+                                <option value="all">Semua</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-item" style="flex-grow: 1;">
+                            <label>Pencarian</label>
+                            <input type="text" id="searchInventory" placeholder="Cari SKU / Nama..." class="input-modern" onkeyup="renderInventory()">
+                        </div>
+                        
+                        <div class="filter-item">
+                            <label>&nbsp;</label>
+                            <button class="btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Laporan</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card table-card" style="padding: 0; overflow: hidden;">
+                    <table class="data-table">
+                        <thead id="inventoryHead">
+                            </thead>
+                        <tbody id="inventory-table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="catalog" class="page-section hidden">
+                <div class="toolbar">
+                    <input type="text" id="search-catalog" placeholder="Cari Nama / SKU..." class="input-modern" onkeyup="renderCatalog()">
+                    <select id="filter-coll-cat" class="input-modern" onchange="renderCatalog()">
+                        <option value="all">Semua Koleksi</option>
+                        <option value="Setala">Setala</option>
+                        <option value="Kala">Kala</option>
+                        <option value="Arkana">Arkana</option>
+                    </select>
+                    <select id="filter-status-cat" class="input-modern" onchange="renderCatalog()">
+                        <option value="all">Semua Status</option>
+                        <option value="Active">Aktif</option>
+                        <option value="Discontinue">Discontinue</option>
+                    </select>
+                </div>
+
+                <div class="card table-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Info Produk</th>
+                                <th>Harga Retail</th>
+                                <th>Total Stok (Gudang + Store)</th>
+                                <th>Breakdown Varian</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="catalog-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="production" class="page-section hidden">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <h4>Purchase Request (PR) Berjalan</h4>
+                                <span class="badge info">Planning</span>
+                            </div>
+                            <table class="simple-table">
+                                <thead><tr><th>No. PR</th><th>Item</th><th>Status</th></tr></thead>
+                                <tbody id="pr-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <h4>Work Order (WO) Produksi</h4>
+                                <span class="badge warning">Production</span>
+                            </div>
+                            <table class="simple-table">
+                                <thead><tr><th>No. WO</th><th>Vendor</th><th>Deadline</th><th>Status</th></tr></thead>
+                                <tbody id="wo-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="vendor" class="page-section hidden">
+                <div class="card table-card">
+                    <h4>Rapor Evaluasi Vendor</h4>
+                    <p class="text-muted mb-3">Berdasarkan ketepatan waktu dan tingkat defect (QC Reject).</p>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nama Vendor</th>
+                                <th>Spesialisasi</th>
+                                <th class="text-center">Total WO</th>
+                                <th class="text-center">On-Time Rate</th>
+                                <th class="text-center">Defect Rate</th>
+                                <th class="text-center">Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vendor-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="detailModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modal-content-body"></div>
+        </div>
+    </div>
+
+    <script src="owner-script.js"></script>
+</body>
+</html>

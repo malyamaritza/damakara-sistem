@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Sistem Terintegrasi - Dama Kara</title>
+    <!-- Brand Favicon -->
+    <link rel="icon" href="Dashboard Excecutive/gambar/logo2.png" type="image/png">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="portal-style.css">
+</head>
+<body>
+
+    <!-- Header Portal -->
+    <header class="portal-header">
+        <div class="header-inner">
+            <div class="brand-wrapper" onclick="showView('overview')">
+                <img src="Dashboard Excecutive/gambar/logo2.png" alt="Dama Kara Logo" class="brand-logo" onerror="this.src='POS & Store Management/Dama Kara_POS_v2/Dama Kara/gambar/logo2.png'">
+                <div class="brand-info">
+                    <h1>DAMA KARA</h1>
+                    <span>Enterprise System Portal</span>
+                </div>
+            </div>
+            <div class="badge-tag">
+                <i class="fas fa-link"></i> Terintegrasi 4 Modul
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-wrapper">
+
+        <!-- ======================================================================
+             1. BERANDA PORTAL (PROFIL, PROSES BISNIS, & 4 PILIHAN MODUL UTAMA)
+             ====================================================================== -->
+        <section id="view-overview" class="view-panel active">
+            
+            <!-- Profil & Proses Bisnis Singkat -->
+            <div class="intro-box">
+                <div class="intro-grid">
+                    <div class="intro-col">
+                        <h3><i class="fas fa-store-alt"></i> Tentang Dama Kara</h3>
+                        <p>
+                            Dama Kara adalah perusahaan ritel fashion asal Bandung (berdiri 2021) dengan fokus utama batik cap dan koleksi modern, yang mengusung misi sosial memfasilitasi terapi seni bagi teman-teman berkebutuhan khusus dengan sistem <em>profit sharing</em> bagi para kolaborator.
+                        </p>
+                    </div>
+                    <div class="intro-col">
+                        <h3><i class="fas fa-sync-alt"></i> Alur Proses Bisnis Terintegrasi</h3>
+                        <p>
+                            Sistem ini menyatukan alur operasional dari hulu ke hilir untuk menghilangkan pencatatan manual spreadsheet dan data silo:
+                        </p>
+                        <div class="flow-badges">
+                            <span class="flow-step"><i class="fas fa-industry"></i> 1. PPIC (Resep & WO)</span>
+                            <span class="flow-arrow"><i class="fas fa-arrow-right"></i></span>
+                            <span class="flow-step"><i class="fas fa-warehouse"></i> 2. Gudang (Rak & Barcode)</span>
+                            <span class="flow-arrow"><i class="fas fa-arrow-right"></i></span>
+                            <span class="flow-step"><i class="fas fa-cash-register"></i> 3. Toko (Kasir POS)</span>
+                            <span class="flow-arrow"><i class="fas fa-arrow-right"></i></span>
+                            <span class="flow-step"><i class="fas fa-chart-line"></i> 4. Executive (Evaluasi)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Pilihan Modul -->
+            <div class="section-title-bar">
+                <div>
+                    <h2><i class="fas fa-th-large"></i> Pilih Modul Utama</h2>
+                    <p>Klik salah satu modul di bawah ini untuk masuk dan memilih role divisi:</p>
+                </div>
+            </div>
+
+            <!-- 4 Portal Pilihan Modul Utama -->
+            <div class="portal-grid-4">
+
+                <!-- 1. Dashboard Executive -->
+                <div class="module-box" onclick="showView('executive')">
+                    <div class="module-box-top">
+                        <div class="module-icon-box">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <span class="role-pill">1 Role</span>
+                    </div>
+                    <h3 class="module-box-title">Dashboard Executive</h3>
+                    <p class="module-box-desc">
+                        Pusat pemantauan pimpinan untuk melihat grafik penjualan omnichannel harian, posisi stok akumulatif toko & gudang, laba, serta deteksi dini barang macet (dead stock).
+                    </p>
+                    <div class="btn-open-module">
+                        <span>Pilih Role Modul</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- 2. POS & Store Management -->
+                <div class="module-box" onclick="showView('pos')">
+                    <div class="module-box-top">
+                        <div class="module-icon-box">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <span class="role-pill">2 Role</span>
+                    </div>
+                    <h3 class="module-box-title">POS & Store Management</h3>
+                    <p class="module-box-desc">
+                        Sistem operasional cabang toko fisik untuk melayani transaksi kasir barcode cepat, pencatatan retur, tutup shift harian, dan restock order digital ke gudang pusat.
+                    </p>
+                    <div class="btn-open-module">
+                        <span>Pilih Role Modul</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- 3. Production & Planning (PPIC) -->
+                <div class="module-box" onclick="showView('ppic')">
+                    <div class="module-box-top">
+                        <div class="module-icon-box">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <span class="role-pill">4 Role</span>
+                    </div>
+                    <h3 class="module-box-title">Production & Planning (PPIC)</h3>
+                    <p class="module-box-desc">
+                        Pusat perencanaan produksi awal untuk mengelola katalog produk, kalkulasi resep yard kain otomatis (BOM), penerbitan Work Order penjahit, dan Quality Control.
+                    </p>
+                    <div class="btn-open-module">
+                        <span>Pilih Role Modul</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- 4. Warehouse Management -->
+                <div class="module-box" onclick="showView('warehouse')">
+                    <div class="module-box-top">
+                        <div class="module-icon-box">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <span class="role-pill">4 Role</span>
+                    </div>
+                    <h3 class="module-box-title">Warehouse Management</h3>
+                    <p class="module-box-desc">
+                        Pengelolaan fisik stok gudang pusat dengan koordinat rak digital presisi, cetak label barcode produk, panduan picking list order, dan sinkronisasi omnichannel Jubelio.
+                    </p>
+                    <div class="btn-open-module">
+                        <span>Pilih Role Modul</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================================
+             2. SUB-PORTAL: DASHBOARD EXECUTIVE
+             ====================================================================== -->
+        <section id="view-executive" class="view-panel subportal-container">
+            <div class="back-bar">
+                <button class="btn-back" onclick="showView('overview')">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Pilihan Modul
+                </button>
+            </div>
+
+            <div class="subportal-header-card">
+                <div class="subportal-header-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="subportal-header-text">
+                    <h2>Modul Dashboard Executive</h2>
+                    <p>Memantau metrik kesehatan bisnis Dama Kara secara menyeluruh dan real-time tanpa rekap manual.</p>
+                </div>
+            </div>
+
+            <div class="section-title-bar">
+                <h2><i class="fas fa-user-tag"></i> Pilih Role Akses:</h2>
+            </div>
+
+            <div class="roles-compact-grid">
+                <!-- Role: Executive / Owner -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-user-tie"></i></div>
+                        <div class="role-info">
+                            <h4>Executive / Owner</h4>
+                            <span>Tingkat Manajemen Puncak</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Memantau grafik tren penjualan produk terlaris harian, melihat posisi stok akumulatif toko & gudang, serta menerima sistem peringatan dini batas stok rendah dan produk tidak laku (dead stock).
+                    </p>
+                    <div class="role-buttons">
+                        <a href="Dashboard Excecutive/Excecutive/owner-login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="Dashboard Excecutive/Excecutive/owner.html" class="btn-app-action" title="Buka dashboard langsung">
+                            <i class="fas fa-desktop"></i> Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================================================================
+             3. SUB-PORTAL: POS & STORE MANAGEMENT
+             ====================================================================== -->
+        <section id="view-pos" class="view-panel subportal-container">
+            <div class="back-bar">
+                <button class="btn-back" onclick="showView('overview')">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Pilihan Modul
+                </button>
+            </div>
+
+            <div class="subportal-header-card">
+                <div class="subportal-header-icon"><i class="fas fa-store"></i></div>
+                <div class="subportal-header-text">
+                    <h2>Modul POS & Store Management</h2>
+                    <p>Sistem operasional di cabang toko fisik untuk melayani pelanggan cepat dan sinkronisasi stok toko.</p>
+                </div>
+            </div>
+
+            <div class="section-title-bar">
+                <h2><i class="fas fa-user-tag"></i> Pilih Role Akses:</h2>
+            </div>
+
+            <div class="roles-compact-grid">
+                <!-- Role 1: Kepala Store -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-user-shield"></i></div>
+                        <div class="role-info">
+                            <h4>Kepala Store (Manager)</h4>
+                            <span>Manajerial Toko Fisik</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Mengawasi operasional toko, memantau sisa stok toko secara langsung, membuat Restock Order digital ke gudang pusat, menyetujui shift kasir, dan mengelola alokasi event diskon produk.
+                    </p>
+                    <div class="role-buttons">
+                        <a href="POS & Store Management/Dama Kara_POS_v2/Dama Kara/store-manager/manager-login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="POS & Store Management/Dama Kara_POS_v2/Dama Kara/store-manager/manager-app.html" class="btn-app-action">
+                            <i class="fas fa-desktop"></i> Aplikasi
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Role 2: Staf Kasir Store -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-cash-register"></i></div>
+                        <div class="role-info">
+                            <h4>Staf Store (Kasir)</h4>
+                            <span>Frontliner & Penjualan</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Melayani transaksi penjualan dengan barcode scanner yang otomatis memotong stok sistem, memproses retur barang pelanggan, serta mengelola buka dan tutup shift kasir harian.
+                    </p>
+                    <div class="role-buttons">
+                        <a href="POS & Store Management/Dama Kara_POS_v2/Dama Kara/store-staff/login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="POS & Store Management/Dama Kara_POS_v2/Dama Kara/store-staff/app.html" class="btn-app-action">
+                            <i class="fas fa-calculator"></i> Layar Kasir
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================================================================
+             4. SUB-PORTAL: PRODUCTION & PLANNING (PPIC)
+             ====================================================================== -->
+        <section id="view-ppic" class="view-panel subportal-container">
+            <div class="back-bar">
+                <button class="btn-back" onclick="showView('overview')">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Pilihan Modul
+                </button>
+            </div>
+
+            <div class="subportal-header-card">
+                <div class="subportal-header-icon"><i class="fas fa-industry"></i></div>
+                <div class="subportal-header-text">
+                    <h2>Modul Production & Planning (PPIC)</h2>
+                    <p>Kendali rantai pasok menjembatani desain kreatif, kebutuhan bahan baku, penerbitan WO, hingga kontrol kualitas.</p>
+                </div>
+            </div>
+
+            <div class="section-title-bar">
+                <h2><i class="fas fa-user-tag"></i> Pilih Role Akses:</h2>
+            </div>
+
+            <div class="roles-compact-grid">
+                <!-- Role 1: Merchandising -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-palette"></i></div>
+                        <div class="role-info">
+                            <h4>Staf Merchandising</h4>
+                            <span>Pengembangan Produk</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Menginput katalog data produk baru, spesifikasi desain koleksi batik cap, penetapan varian SKU ukuran & warna, serta mengelola pesanan custom order kolaborasi komunitas.
+                    </p>
+                    <div class="role-buttons">
+                        <a href="Production & Planning (PPIC)/Dama Kara/merchandising/login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="Production & Planning (PPIC)/Dama Kara/merchandising/index.html" class="btn-app-action">
+                            <i class="fas fa-desktop"></i> Portal
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Role 2: Planning -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-calculator"></i></div>
+                        <div class="role-info">
+                            <h4>Staf Perencanaan (Planning)</h4>
+                            <span>Perhitungan Bahan (BOM)</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Mengelola Resep Produk (BOM), menghitung kalkulasi otomatis berapa yard kain yang dibutuhkan berdasarkan desain, menerbitkan Purchase Request (PR), dan memantau stok bahan.
+                    </p>
+                    <div class="role-buttons">
+                        <a href="Production & Planning (PPIC)/Dama Kara/planning/planning-login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="Production & Planning (PPIC)/Dama Kara/planning/planning.html" class="btn-app-action">
+                            <i class="fas fa-desktop"></i> Modul
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Role 3: Produksi -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-cogs"></i></div>
+                        <div class="role-info">
+                            <h4>Staf Produksi</h4>
+                            <span>Manufaktur & Konveksi</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Memeriksa ketersediaan kain, menerbitkan Work Order (WO) digital untuk vendor penjahit konveksi mitra, serta memantau progres jahitan hingga pesanan siap dikirimkan.
+                    </p>
+                    <div class="role-buttons">
+                        <a href="Production & Planning (PPIC)/Dama Kara/production/production-login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="Production & Planning (PPIC)/Dama Kara/production/production.html" class="btn-app-action">
+                            <i class="fas fa-desktop"></i> Modul
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Role 4: Quality Control PPIC -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-clipboard-check"></i></div>
+                        <div class="role-info">
+                            <h4>Staf Quality Control (QC)</h4>
+                            <span>Inspeksi Penerimaan Vendor</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Menerima pakaian dari vendor penjahit dan melakukan pengecekan kualitas fisik ketat (jahitan, ukuran, warna) agar memenuhi standar Dama Kara sebelum masuk rak gudang.
+                    </p>
+                    <div class="role-buttons">
+                        <a href="Production & Planning (PPIC)/Dama Kara/QC/qc-login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="Production & Planning (PPIC)/Dama Kara/QC/qc.html" class="btn-app-action">
+                            <i class="fas fa-desktop"></i> QC
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================================================================
+             5. SUB-PORTAL: WAREHOUSE MANAGEMENT
+             ====================================================================== -->
+        <section id="view-warehouse" class="view-panel subportal-container">
+            <div class="back-bar">
+                <button class="btn-back" onclick="showView('overview')">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Pilihan Modul
+                </button>
+            </div>
+
+            <div class="subportal-header-card">
+                <div class="subportal-header-icon"><i class="fas fa-warehouse"></i></div>
+                <div class="subportal-header-text">
+                    <h2>Modul Warehouse Management</h2>
+                    <p>Manajemen pergerakan fisik barang gudang pusat dengan denah rak digital dan sinkronisasi stok omnichannel.</p>
+                </div>
+            </div>
+
+            <div class="section-title-bar">
+                <h2><i class="fas fa-user-tag"></i> Pilih Role Akses:</h2>
+            </div>
+
+            <div class="roles-compact-grid">
+                <!-- Role 1: Kepala Warehouse -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-warehouse"></i></div>
+                        <div class="role-info">
+                            <h4>Kepala Warehouse</h4>
+                            <span>Supervisor Gudang</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Mengelola pemetaan denah koordinat rak digital, memantau kapasitas stok akumulatif di gudang pusat, serta menyetujui permintaan restock order dari cabang toko fisik.
+                    </p>
+                    <div class="role-buttons">
+                        <a href="Warehouse Management/DamaKara-Warehouse/kepala-warehouse/login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="Warehouse Management/DamaKara-Warehouse/kepala-warehouse/dashboard.html" class="btn-app-action">
+                            <i class="fas fa-desktop"></i> Dashboard
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Role 2: Staf Inbound -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-box-open"></i></div>
+                        <div class="role-info">
+                            <h4>Staf Inbound (Penerimaan)</h4>
+                            <span>Registrasi & Penataan Rak</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Mencetak label barcode unik produk lolos QC, meregistrasikan stok fisik barang masuk ke sistem (scan-in), dan menempatkan barang ke rak sesuai koordinat sistem (putaway).
+                    </p>
+                    <div class="role-buttons">
+                        <a href="Warehouse Management/DamaKara-Warehouse/inbound/inbound-login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="Warehouse Management/DamaKara-Warehouse/inbound/inbound.html" class="btn-app-action">
+                            <i class="fas fa-desktop"></i> Inbound
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Role 3: Staf Outbound -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-dolly"></i></div>
+                        <div class="role-info">
+                            <h4>Staf Outbound (Picker)</h4>
+                            <span>Pengambilan & Kirim</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Membuka daftar pesanan (Picking List), menuju koordinat rak presisi untuk mengambil pakaian, scan barcode barang keluar, dan sinkronisasi otomatis stok via omnichannel Jubelio.
+                    </p>
+                    <div class="role-buttons">
+                        <a href="Warehouse Management/DamaKara-Warehouse/outbound/outbound-login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="Warehouse Management/DamaKara-Warehouse/outbound/outbound.html" class="btn-app-action">
+                            <i class="fas fa-desktop"></i> Outbound
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Role 4: Staf QC Gudang -->
+                <div class="role-card-compact">
+                    <div class="role-card-head">
+                        <div class="role-icon"><i class="fas fa-tasks"></i></div>
+                        <div class="role-info">
+                            <h4>Staf QC Gudang</h4>
+                            <span>Inspeksi Logistik</span>
+                        </div>
+                    </div>
+                    <p class="role-task-desc">
+                        <strong>Tugas:</strong> Melakukan pemeriksaan fisik dan integritas kemasan produk kain/baju yang tiba di dermaga penerimaan gudang sebelum dialokasikan ke rak penyimpanan.
+                    </p>
+                    <div class="role-buttons">
+                        <a href="Warehouse Management/DamaKara-Warehouse/QC/qc-login.html" class="btn-login-action">
+                            <i class="fas fa-sign-in-alt"></i> Masuk Login
+                        </a>
+                        <a href="Warehouse Management/DamaKara-Warehouse/QC/qc.html" class="btn-app-action">
+                            <i class="fas fa-desktop"></i> Layar QC
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Ringkas -->
+    <footer class="portal-footer-clean">
+        &copy; 2026 PT Dama Kara Indonesia &bull; Final Advanced System Analysis & Design (ASAD) Project
+    </footer>
+
+    <!-- Portal Script -->
+    <script src="portal-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Merchandising - Batik ABC</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="logo-area">
+            <img src="../gambar/logo2.png" alt="Dama Kara Logo" class="login-logo-img">
+            <h2 style="margin-top: 10px;">Merchandising</h2>
+            <p class="text-muted" style="font-size: 0.9rem;">Perencanaan & Pengembangan Produk</p>
+        </div>
+        <form id="loginForm">
+            <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                <label>Username</label>
+                <input type="text" id="usernameInput" placeholder="merch_admin" class="form-control" required>
+            </div>
+            <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                <label>Password</label>
+                <input type="password" id="passwordInput" placeholder="******" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" style="margin-top: 20px; padding: 15px;">Masuk Portal</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

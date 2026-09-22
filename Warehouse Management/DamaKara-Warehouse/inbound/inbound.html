@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbound Station - ABC Warehouse</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="inbound-style.css">
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="../gambar/logoputihnobg.png" alt="ABC" class="sidebar-logo">
+        </div>
+        
+        <ul class="nav-links">
+            <li class="active" onclick="showPage('labeling')" title="Labeling Station">
+                <a href="#">
+                    <i class="fas fa-tags"></i> 
+                    <span class="link-text">Labeling</span>
+                </a>
+            </li>
+            
+            <li onclick="showPage('scanning')" title="Scan Masuk Gudang">
+                <a href="#">
+                    <i class="fas fa-barcode"></i> 
+                    <span class="link-text">Scan Inbound</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <li onclick="window.location.href='inbound-login.html'">
+                <a href="#">
+                    <i class="fas fa-sign-out-alt"></i> 
+                    <span class="link-text">Keluar Station</span>
+                </a>
+            </li>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        
+        <header class="top-bar">
+            <div>
+                <h2 id="pageTitle">Labeling Station</h2>
+                <p class="subtitle">Kelola antrean cetak label dan input stok masuk</p>
+            </div>
+            <div class="user-profile">
+                <div class="text-info">
+                    <span class="name">Station 01</span>
+                    <span class="role">Staf Inbound</span>
+                </div>
+                <div class="avatar">S1</div>
+            </div>
+        </header>
+
+        <section id="labeling-page" class="page-section active">
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="icon bg-primary"><i class="fas fa-tshirt"></i></div>
+                    <div class="info">
+                        <h3>190 Pcs</h3>
+                        <p>Total Antrean Barang</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon bg-warning"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="info">
+                        <h3>16 Pcs</h3>
+                        <p>Barang Defect (DF)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="queueSearch" placeholder="Cari Nama Produk / SKU..." onkeyup="renderQueue()"> </div>
+                <button class="btn-secondary" onclick="renderQueue()"><i class="fas fa-sync-alt"></i> Refresh Data</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Identitas Produk</th>
+                            <th>SKU Dasar</th>
+                            <th class="text-center">Antrean Normal</th>
+                            <th class="text-center">Antrean Defect</th>
+                            <th>Aksi Cetak</th>
+                        </tr>
+                    </thead>
+                    <tbody id="queueTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="scanning-page" class="page-section">
+            <div class="scan-layout">
+                
+                <div class="scan-input-area">
+                    <div class="barcode-visual">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/EAN13.svg/1200px-EAN13.svg.png" alt="Barcode Example" class="barcode-img">
+                        <div class="scan-laser"></div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label style="font-weight: 500; color: var(--text-dark);">Arahkan Scanner & Tentukan Jumlah:</label>
+                        
+                        <div class="scan-controls-wrapper">
+                            <div style="flex: 3;">
+                                <input type="text" id="barcodeInput" class="scan-field" placeholder="Klik & Scan Barcode..." autofocus onkeypress="handleEnter(event)">
+                            </div>
+                            
+                            <div style="flex: 1;">
+                                <input type="number" id="scanQty" class="scan-field" value="1" min="1" placeholder="Qty">
+                            </div>
+                        </div>
+                        
+                        <span class="hint"><i class="fas fa-info-circle"></i> Tips: Ubah Qty sebelum scan jika barang > 1</span>
+                    </div>
+
+                    <div class="manual-test">
+                        <p style="margin-bottom: 10px; font-size: 13px;"><strong>Simulasi Scan Manual:</strong></p>
+                        
+                        <button class="btn-tag normal" onclick="simulateScanInput('DMK-001')">
+                            <i class="fas fa-box"></i> DMK-001 (Normal)
+                        </button>
+                        
+                        <button class="btn-tag defect" onclick="simulateScanInput('DMK-001-DF')">
+                            <i class="fas fa-exclamation-triangle"></i> DMK-001 (Defect)
+                        </button>
+
+                        <br>
+
+                        <button class="btn-tag defect" onclick="simulateScanInput('DMK-003-DF')">
+                            <i class="fas fa-exclamation-triangle"></i> DMK-003 (Defect)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="scan-log-area">
+                    <div class="log-header">
+                        <h3>Riwayat Scan Sesi Ini</h3>
+                        <button class="btn-text" onclick="clearLog()">Bersihkan</button>
+                    </div>
+                    <div class="log-list" id="scanLogList">
+                        <div class="empty-state">Belum ada barang di-scan</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="printModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-header-custom">
+                <h3>Konfigurasi Cetak Label</h3>
+                <span class="badge" id="modalTypeBadge">NORMAL</span>
+            </div>
+            
+            <div class="print-preview">
+                <div class="label-mockup" id="labelMockup">
+                    <div class="barcode-lines">|| ||| || ||</div>
+                    <span class="sku-text" id="modalSkuPreview">DMK-001</span>
+                    <span class="defect-mark" id="modalDefectMark">DEFECT</span>
+                </div>
+                <div class="print-info">
+                    <h4 id="modalProdName">Nama Produk</h4>
+                    <p>Sisa Antrean: <strong id="modalMaxQty">0</strong> pcs</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Jumlah Label yang Dicetak</label>
+                <input type="number" id="printQty" class="input-modern" value="1" min="1">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal()">Batal</button>
+                <button class="btn-primary" onclick="executePrint()">Cetak Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="inbound-script.js"></script>
+</body>
+</html>

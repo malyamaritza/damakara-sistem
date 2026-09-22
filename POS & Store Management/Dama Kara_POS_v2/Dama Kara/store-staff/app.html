@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem POS - Batik ABC</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="../gambar/logoputihnobg.png" alt="Dama Kara" class="sidebar-logo">
+            </div>
+            <ul class="nav-links">
+                <li class="active" onclick="showPage('dashboard')" id="nav-dashboard">
+                    <a href="#"><i class="fas fa-th-large"></i> <span class="link-text">Dashboard</span></a>
+                </li>
+                <li onclick="showPage('pos')" id="nav-pos">
+                    <a href="#"><i class="fas fa-cash-register"></i> <span class="link-text">Kasir (POS)</span></a>
+                </li>
+                <li onclick="showPage('history')" id="nav-history">
+                    <a href="#"><i class="fas fa-history"></i> <span class="link-text">Riwayat</span></a>
+                </li>
+                <li onclick="showPage('shift')" id="nav-shift">
+                    <a href="#"><i class="fas fa-lock"></i> <span class="link-text">Tutup Shift</span></a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <li onclick="window.location.href='login.html'">
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> <span class="link-text">Logout</span></a>
+                </li>
+            </div>
+        </nav>
+
+        <main class="content">
+            <header class="top-bar">
+                <h2 id="pageTitle">Dashboard</h2>
+                <div class="user-info">
+                    <div class="user-details">
+                        <span>Kasir: <strong>Budi Santoso</strong></span>
+                        <span class="badge-shift">Shift 1 (Pagi)</span>
+                    </div>
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                </div>
+            </header>
+
+            <section id="dashboard" class="page-section">
+                <div class="cards-grid">
+                    <div class="card summary-card">
+                        <div class="icon-box"><i class="fas fa-coins"></i></div>
+                        <div><p>Total Penjualan</p><h3>Rp 15.450.000</h3></div>
+                    </div>
+                    <div class="card summary-card">
+                        <div class="icon-box"><i class="fas fa-wallet"></i></div>
+                        <div><p>Uang Tunai (Cash)</p><h3>Rp 5.200.000</h3></div>
+                    </div>
+                    <div class="card summary-card">
+                        <div class="icon-box"><i class="fas fa-qrcode"></i></div>
+                        <div><p>Non-Tunai (Digital)</p><h3>Rp 10.250.000</h3></div>
+                    </div>
+                    <div class="card summary-card">
+                        <div class="icon-box"><i class="fas fa-shirt"></i></div>
+                        <div><p>Produk Terjual</p><h3>42 Pcs</h3></div>
+                    </div>
+                </div>
+
+                <div class="details-grid">
+                    <div class="card chart-card">
+                        <h4><i class="fas fa-chart-line"></i> Ringkasan Harian</h4>
+                        <div class="stat-row"><span>Jumlah Transaksi</span><strong>28 Transaksi</strong></div>
+                        <div class="stat-row"><span>Jumlah Retur</span><strong class="text-danger">1 Transaksi</strong></div>
+                        <div class="stat-row"><span>Pengeluaran Diskon</span><strong class="text-warning">Rp 450.000</strong></div>
+                        <div class="stat-row highlight-row"><span>Cash di Laci (Saat Ini)</span><strong>Rp 5.400.000</strong></div>
+                    </div>
+                    <div class="card chart-card">
+                        <h4><i class="fas fa-tags"></i> Detail Promo & Diskon</h4>
+                        <ul class="simple-list">
+                            <li class="stat-row"><span>Promo Gajian (10%)</span> <span class="text-danger">- Rp 250.000</span></li>
+                            <li class="stat-row"><span>Member Discount (5%)</span> <span class="text-danger">- Rp 200.000</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pos" class="page-section hidden">
+                <div class="pos-layout">
+                    <div class="product-area">
+                        <div class="action-bar">
+                            <button class="btn-primary" onclick="resetCart()"><i class="fas fa-plus"></i> Transaksi Baru</button>
+                            <div class="search-wrapper">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" placeholder="Scan barcode atau cari nama produk..." id="skuInput" onkeyup="filterProducts()">
+                            </div>
+                        </div>
+                        
+                        <div class="filter-bar" style="display: flex; gap: 15px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; align-items: flex-end;">
+    
+    <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label style="font-size: 0.75rem; font-weight: 600; color: #888;">Tipe User</label>
+        <select id="filterUserType" class="input-field" onchange="filterProducts()" style="min-width: 110px; padding: 8px; cursor: pointer;">
+            <option value="all">Semua</option>
+            <option value="Men">Pria (Men)</option>
+            <option value="Women">Wanita (Women)</option>
+            <option value="Kids">Anak (Kids)</option>
+        </select>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label style="font-size: 0.75rem; font-weight: 600; color: #888;">Koleksi</label>
+        <select id="filterCollection" class="input-field" onchange="filterProducts()" style="min-width: 130px; padding: 8px; cursor: pointer;">
+            <option value="all">Semua Koleksi</option>
+            <option value="Setala">Setala</option>
+            <option value="Arkana">Arkana</option>
+            <option value="Kala">Kala</option>
+            <option value="Aksata">Aksata</option>
+            <option value="Obi">Obi</option>
+            <option value="Suar">Suar</option>
+        </select>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label style="font-size: 0.75rem; font-weight: 600; color: #888;">Kategori</label>
+        <select id="filterCategory" class="input-field" onchange="filterProducts()" style="min-width: 130px; padding: 8px; cursor: pointer;">
+            <option value="all">Semua Kategori</option>
+            <option value="Shirt">Shirt (Kemeja)</option>
+            <option value="Tunik">Tunik</option>
+            <option value="Outer">Outer</option>
+            <option value="Accessories">Accessories</option>
+        </select>
+    </div>
+
+</div>
+
+                        <div class="product-grid" id="productGrid">
+                            </div>
+                    </div>
+
+                    <div class="cart-area">
+                        <div class="cart-header">
+                            <h3><i class="fas fa-shopping-cart"></i> Keranjang</h3>
+                            <div class="customer-badge" id="customerTypeBadge">Reguler</div>
+                        </div>
+                        <div class="cart-items" id="cartItems">
+                            <div class="empty-state">
+                                <i class="fas fa-shopping-basket fa-3x"></i>
+                                <p>Belum ada barang</p>
+                            </div>
+                        </div>
+                        <div class="cart-footer">
+                            <div class="summary-row"><span>Subtotal</span><span id="cartSubtotal">Rp 0</span></div>
+                            <div class="summary-row discount"><span>Diskon</span><span id="cartDiscount">- Rp 0</span></div>
+                            <div class="summary-row total"><span>Total Bayar</span><span id="cartTotal">Rp 0</span></div>
+                            <button class="btn-primary full-width big-btn" onclick="openPaymentModal()">
+                                <i class="fas fa-chevron-right"></i> Proses Pembayaran
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="history" class="page-section hidden">
+                <div class="toolbar">
+                    <div class="search-wrapper wide">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Cari No. Transaksi (TRX...)" class="input-field" id="historySearch">
+                    </div>
+                    <button class="btn-primary" onclick="renderHistoryDummy()">Refresh</button>
+                </div>
+                <div class="card table-card mt-3">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Waktu</th>
+                                <th>No. Transaksi</th>
+                                <th>Total Item</th>
+                                <th>Metode</th>
+                                <th>Total Bayar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="shift" class="page-section hidden">
+                <div class="shift-header-card">
+                    <div class="shift-info">
+                        <h3>Shift Saat Ini: Shift 1</h3>
+                        <p>Dimulai: 08:00 - Budi S.</p>
+                    </div>
+                    <button class="btn-danger big-btn" onclick="openCloseShiftModal()"><i class="fas fa-lock"></i> Tutup Shift Sekarang</button>
+                </div>
+                <div class="card table-card mt-3">
+                    <h3>Riwayat Shift Sebelumnya</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th><th>Shift</th><th>Kasir</th><th>Modal Awal</th><th>Actual Cash</th><th>Selisih</th><th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>24 Okt 2025</td><td>Shift 1</td><td>Budi S.</td><td>Rp 200.000</td><td>Rp 5.400.000</td><td class="text-success">Rp 0</td><td><span class="badge success">Verified</span></td>
+                            </tr>
+                            <tr>
+                                <td>23 Okt 2025</td><td>Shift 2</td><td>Siti A.</td><td>Rp 200.000</td><td>Rp 4.100.000</td><td class="text-danger">- Rp 10.000</td><td><span class="badge warning">Selisih</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="customerModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('customerModal')">&times;</span>
+            <h3>Mulai Transaksi Baru</h3>
+            <p>Pilih tipe pelanggan untuk transaksi ini:</p>
+            <div class="modal-actions-grid">
+                <button class="btn-choice outline" onclick="setCustomer('Reguler')">
+                    <i class="fas fa-user"></i>
+                    <span>Pelanggan Reguler</span>
+                </button>
+                <button class="btn-choice primary" onclick="showMemberInput()">
+                    <i class="fas fa-id-card"></i>
+                    <span>Member (Diskon 5%)</span>
+                </button>
+            </div>
+            <div id="memberInputArea" class="hidden mt-3 input-area-box">
+                <label>Nomor Member / No. HP:</label>
+                <input type="text" placeholder="Contoh: 08123456789" class="input-field" id="memberField">
+                <button class="btn-primary mt-2 full-width" onclick="validateMember()">Terapkan Member</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="variantModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('variantModal')">&times;</span>
+            <h3 id="modalProdName">Nama Produk</h3>
+            <p id="modalProdPrice" class="price-tag">Rp 0</p>
+            
+            <div class="variant-section">
+                <p class="text-muted">Pilih Warna:</p>
+                <div class="color-options" id="colorContainer">
+                    </div>
+            </div>
+
+            <div class="variant-section">
+                <p class="text-muted">Pilih Ukuran:</p>
+                <div class="size-options" id="sizeContainer">
+                    <button class="size-btn" onclick="selectSize(this)">S</button>
+                    <button class="size-btn active" onclick="selectSize(this)">M</button>
+                    <button class="size-btn" onclick="selectSize(this)">L</button>
+                    <button class="size-btn" onclick="selectSize(this)">XL</button>
+                </div>
+            </div>
+            
+            <div class="qty-control-panel mt-3">
+                <label>Jumlah Beli:</label>
+                <div class="qty-stepper">
+                    <button type="button" onclick="adjustModalQty(-1)">-</button>
+                    <input type="number" id="modalQty" value="1" min="1" readonly>
+                    <button type="button" onclick="adjustModalQty(1)">+</button>
+                </div>
+            </div>
+
+            <button class="btn-primary full-width mt-3" onclick="confirmAddToCart()">
+                <i class="fas fa-cart-plus"></i> Tambahkan ke Keranjang
+            </button>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('paymentModal')">&times;</span>
+            <h3>Pembayaran</h3>
+            <div class="payment-summary-box">
+                <span>Total Tagihan:</span>
+                <h2 id="payModalTotal">Rp 0</h2>
+            </div>
+
+            <div class="payment-methods mt-3">
+                <button class="method-btn active" id="btnCash" onclick="selectPaymentMethod('Cash')">
+                    <i class="fas fa-money-bill-wave"></i> Tunai (Cash)
+                </button>
+                <button class="method-btn" id="btnQRIS" onclick="selectPaymentMethod('QRIS')">
+                    <i class="fas fa-qrcode"></i> QRIS
+                </button>
+                <button class="method-btn" id="btnDigital" onclick="selectPaymentMethod('Digital')">
+                    <i class="fas fa-credit-card"></i> Debit/Kredit
+                </button>
+            </div>
+
+            <div id="cashLogicArea" class="mt-3">
+                <label>Uang Tunai Diterima:</label>
+                <div class="input-currency-wrapper">
+                    <span>Rp</span>
+                    <input type="number" id="cashReceived" class="input-field big-input" placeholder="0" onkeyup="calculateChange()">
+                </div>
+                <div class="change-display mt-2">
+                    <span>Kembalian:</span>
+                    <strong id="cashChangeDisplay">Rp 0</strong>
+                </div>
+                <div class="quick-cash mt-2">
+                    <button onclick="setCashAmount(50000)">50rb</button>
+                    <button onclick="setCashAmount(100000)">100rb</button>
+                    <button onclick="setCashAmount('exact')">Uang Pas</button>
+                </div>
+            </div>
+
+            <button class="btn-primary full-width big-btn mt-3" onclick="finalizePayment()">
+                <i class="fas fa-print"></i> Bayar & Cetak Struk
+            </button>
+        </div>
+    </div>
+
+    <div id="transactionDetailModal" class="modal hidden">
+        <div class="modal-content wide">
+            <span class="close-btn" onclick="closeModal('transactionDetailModal')">&times;</span>
+            <div class="modal-header-border">
+                <h3 id="detailTrxId">Detail Transaksi #TRX-9981</h3>
+                <span class="badge success" id="detailStatus">Selesai</span>
+            </div>
+            
+            <div class="detail-scroll-area">
+                <table class="detail-table">
+                    <thead><tr><th>Item</th><th>Var</th><th>Qty</th><th>Subtotal</th></tr></thead>
+                    <tbody id="detailItemList"></tbody>
+                </table>
+            </div>
+            
+            <div class="detail-footer-summary">
+                <div class="row"><span>Total Item:</span> <strong id="detailTotalItem">0</strong></div>
+                <div class="row"><span>Metode Bayar:</span> <strong id="detailMethod">-</strong></div>
+                <hr>
+                <div class="row total"><span>Total Bayar:</span> <strong id="detailGrandTotal">Rp 0</strong></div>
+                <div class="row" id="detailCashRow"><span>Tunai:</span> <span id="detailCashAmount">Rp 0</span></div>
+                <div class="row" id="detailChangeRow"><span>Kembalian:</span> <span id="detailChangeAmount">Rp 0</span></div>
+            </div>
+
+            <button class="btn-danger full-width mt-3" onclick="openReturnForm()">
+                <i class="fas fa-undo"></i> Proses Retur Barang
+            </button>
+        </div>
+    </div>
+
+    <div id="returnFormModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('returnFormModal')">&times;</span>
+            <h3>Formulir Retur Barang</h3>
+            <p class="text-muted text-sm">TRX ID: <span id="returnTrxId"></span></p>
+            
+            <div class="form-group mt-3">
+                <label>Pilih Barang yang ingin diretur:</label>
+                <div id="returnItemsList" class="return-items-list">
+                    </div>
+            </div>
+
+            <button class="btn-primary full-width mt-3" onclick="confirmReturn()">Konfirmasi Retur</button>
+        </div>
+    </div>
+
+    <div id="closeShiftModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('closeShiftModal')">&times;</span>
+            <h3>Konfirmasi Tutup Shift</h3>
+            <div class="alert-box info mt-2">
+                Pastikan Anda telah menghitung uang fisik di laci kasir.
+            </div>
+            
+            <div class="shift-summary-box mt-3">
+                <div class="row"><span>Sistem Cash:</span> <strong>Rp 5.400.000</strong></div>
+                <div class="row"><span>Modal Awal:</span> <strong>Rp 200.000</strong></div>
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Masukkan Uang Fisik (Actual Cash):</label>
+                <div class="input-currency-wrapper">
+                    <span>Rp</span>
+                    <input type="number" class="input-field big-input" placeholder="0">
+                </div>
+            </div>
+
+            <button class="btn-primary full-width mt-3" onclick="alert('Shift Ditutup! Laporan tersimpan.'); window.location.href='login.html'">
+                Settle & Logout
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

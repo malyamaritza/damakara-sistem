@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Perencanaan (PPIC) - Batik ABC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="planning-style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="../gambar/logoputihnobg.png" alt="Dama Kara" class="sidebar-logo">
+            </div>
+            <ul class="nav-links">
+                <li class="active" onclick="showPage('dashboard')" id="nav-dashboard">
+                    <a href="#"><i class="fas fa-chart-line"></i> <span class="link-text">Dashboard</span></a>
+                </li>
+                <li onclick="showPage('master-prod')" id="nav-master-prod">
+                    <a href="#"><i class="fas fa-shirt"></i> <span class="link-text">Produk & Resep</span></a>
+                </li>
+                <li onclick="showPage('sales-perf')" id="nav-sales-perf">
+    <a href="#"><i class="fas fa-chart-bar"></i> <span class="link-text">Performa Penjualan</span></a>
+</li>
+                <li onclick="showPage('inventory')" id="nav-inventory">
+    <a href="#"><i class="fas fa-boxes"></i> <span class="link-text">Monitoring Stok</span></a>
+</li>
+                <li onclick="showPage('view-co')" id="nav-view-co">
+                    <a href="#"><i class="fas fa-clipboard-list"></i> <span class="link-text">Custom Orders</span></a>
+                </li>
+                <li onclick="showPage('purchase-req')" id="nav-purchase-req">
+                    <a href="#"><i class="fas fa-file-invoice"></i> <span class="link-text">Purchase Req</span></a>
+                </li>
+                <li onclick="showPage('fabric-mgmt')" id="nav-fabric-mgmt">
+                    <a href="#"><i class="fas fa-scroll"></i> <span class="link-text">Kelola Kain</span></a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <li onclick="window.location.href='planning-login.html'">
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> <span class="link-text">Logout</span></a>
+                </li>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 id="page-title">Dashboard</h2>
+                <div class="user-profile">
+                    <div style="text-align: right;">
+                        <span style="display:block; font-weight:600;">Azlekia(PPIC)</span>
+                        <span class="badge-primary" style="font-size: 0.7rem; padding: 2px 8px; border-radius: 4px;">Staff Planning</span>
+                    </div>
+                    <div class="avatar"><i class="fas fa-user-gear"></i></div>
+                </div>
+            </header>
+
+            <section id="dashboard" class="page-section">
+    <div class="stats-grid-4">
+        <div class="stat-card">
+            <div class="stat-icon info"><i class="fas fa-clipboard-list"></i></div>
+            <div>
+                <h3 id="dash-co-active">0</h3>
+                <p>CO Berjalan</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon purple"><i class="fas fa-industry"></i></div>
+            <div>
+                <h3 id="dash-pr-active">0</h3>
+                <p>PR Berjalan</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon warning"><i class="fas fa-flask"></i></div>
+            <div>
+                <h3 id="dash-missing-recipe">0</h3>
+                <p>Butuh Resep</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon danger"><i class="fas fa-exclamation-triangle"></i></div>
+            <div>
+                <h3 id="dash-stock-crit">0</h3>
+                <p>Stok Kritis</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-split">
+        
+        <div class="card" style="margin-bottom: 0; height: 100%;">
+            <div class="card-header">
+                <h3><i class="fas fa-history"></i> Aktivitas PR Terbaru</h3>
+                <a href="#" onclick="showPage('purchase-req')" style="font-size: 0.85rem;">Lihat Semua</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr><th>ID PR</th><th>Tipe</th><th>Tanggal</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="dash-pr-table">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 0; height: 100%;">
+            <div class="card-header" style="border-bottom: 1px dashed #eee; padding-bottom: 15px;">
+                <h3><i class="fas fa-bell"></i> Notifikasi Penting</h3>
+                <span class="badge badge-secondary">Terbaru</span>
+            </div>
+            <div class="notif-list" id="dash-notif-container">
+                </div>
+        </div>
+
+    </div>
+</section>
+
+            <section id="master-prod" class="page-section hidden">
+    <div id="mp-list-view">
+        <div class="action-bar">
+            <div class="filters" style="flex-wrap: wrap;">
+                <input type="text" class="form-control" id="mp-search" placeholder="Cari Nama Produk..." onkeyup="filterMasterProd()" style="width: 200px;">
+                
+                <select class="form-control" id="mp-filter-status" onchange="filterMasterProd()">
+                    <option value="all">Semua Status</option>
+                    <option value="Waiting Specs">Butuh Resep (Waiting)</option>
+                    <option value="Aktif">Siap Produksi (Aktif)</option>
+                </select>
+
+                
+
+                <select class="form-control" id="mp-filter-coll" onchange="filterMasterProd()">
+                    <option value="all">Semua Koleksi</option>
+                    <option value="Setala">Setala</option>
+                    <option value="Arkana">Arkana</option>
+                    <option value="Kala">Kala</option>
+                    <option value="Aksata">Aksata</option>
+                    <option value="Obi">Obi</option>
+                    <option value="Suar">Suar</option>
+                </select>
+
+                <select class="form-control" id="mp-filter-cat" onchange="filterMasterProd()">
+                    <option value="all">Semua Kategori</option>
+                    <option value="Shirt">Shirt</option>
+                    <option value="Tunik">Tunik</option>
+                    <option value="Outer">Outer</option>
+                    <option value="Accessories">Accessories</option>
+                </select>
+
+                <select class="form-control" id="mp-filter-user" onchange="filterMasterProd()">
+                    <option value="all">Semua User</option>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Kids">Kids</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="card">
+            <table class="table">
+                <thead>
+    <tr>
+        <th width="35%">Info Produk</th> 
+        <th>Kategori</th>
+        <th>Koleksi</th> <th>Target User</th> <th>Status</th>
+        <th>Aksi</th>
+    </tr>
+</thead>
+                <tbody id="mp-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="mp-form-view" class="hidden">
+        <div class="card form-card" style="max-width: 900px;">
+            <div class="card-header">
+                <h3><i class="fas fa-arrow-left" onclick="closeRecipeForm()" style="cursor:pointer; margin-right:10px;"></i> Lengkapi Spesifikasi Produk</h3>
+            </div>
+            <div style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px;">
+                <h2 id="rec-header-name" style="margin:0;">Nama Produk</h2>
+                <p id="rec-header-sku" class="text-muted">SKU-001</p>
+            </div>
+            
+            <div id="recipe-variants-container"></div>
+
+            <div class="btn-right">
+                <button class="btn btn-secondary" onclick="closeRecipeForm()">Batal</button>
+                <button class="btn btn-success" onclick="saveRecipe()">Simpan & Aktifkan Produk</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section id="sales-perf" class="page-section hidden">
+    
+    <div class="filter-panel">
+        <div class="filter-row-top">
+            <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:0.8rem; margin-bottom:2px;">Periode Dari</label>
+                <input type="date" id="perf-date-start" class="form-control small-input" style="width:140px;">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:0.8rem; margin-bottom:2px;">Sampai Tanggal</label>
+                <input type="date" id="perf-date-end" class="form-control small-input" style="width:140px;">
+            </div>
+            <div class="form-group" style="margin-bottom:0; flex:1;">
+                <label style="font-size:0.8rem; margin-bottom:2px;">Urutkan Penjualan</label>
+                <select id="perf-sort" class="form-control" onchange="filterSalesPerf()">
+                    <option value="top">Tertinggi (Top Sales)</option>
+                    <option value="low">Terendah (Low Sales)</option>
+                </select>
+            </div>
+        </div>
+
+        <hr style="margin:0; border:0; border-top:1px dashed #eee;">
+
+        <div class="filter-row-bottom">
+            <select id="perf-coll" class="form-control" style="width:auto; min-width:130px;" onchange="filterSalesPerf()">
+                <option value="all">Semua Koleksi</option>
+                <option value="Setala">Setala</option>
+                <option value="Arkana">Arkana</option>
+                <option value="Kala">Kala</option>
+                <option value="Aksata">Aksata</option>
+                <option value="Obi">Obi</option>
+                <option value="Suar">Suar</option>
+            </select>
+
+            <select id="perf-cat" class="form-control" style="width:auto; min-width:130px;" onchange="filterSalesPerf()">
+                <option value="all">Semua Kategori</option>
+                <option value="Shirt">Shirt</option>
+                <option value="Tunik">Tunik</option>
+                <option value="Outer">Outer</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+
+            <select id="perf-user" class="form-control" style="width:auto; min-width:130px;" onchange="filterSalesPerf()">
+                <option value="all">Semua User</option>
+                <option value="Men">Men</option>
+                <option value="Women">Women</option>
+                <option value="Kids">Kids</option>
+            </select>
+
+            <select id="perf-cond" class="form-control" style="width:auto; min-width:130px;" onchange="filterSalesPerf()">
+                <option value="all">Semua Kondisi</option>
+                <option value="Ori">Original (Normal)</option>
+                <option value="Defect">Defect (Cacat)</option>
+            </select>
+            
+            <button class="btn-primary" style="margin-left:auto;" onclick="filterSalesPerf()"><i class="fas fa-filter"></i> Terapkan</button>
+        </div>
+    </div>
+
+    <div class="card table-card">
+        <table class="table perf-table">
+            <thead>
+                <tr>
+                    <th width="30%">Info Produk</th>
+                    <th>Kategori / User</th>
+                    <th>Kondisi</th>
+                    <th class="text-right">Online</th>
+                    <th class="text-right">Offline</th>
+                    <th class="text-right">Event</th>
+                    <th class="text-right total-col">Total Kumulatif</th>
+                </tr>
+            </thead>
+            <tbody id="sales-perf-body">
+                </tbody>
+        </table>
+    </div>
+</section>
+
+
+<section id="inventory" class="page-section hidden">
+    <div class="card" style="margin-bottom: 20px; padding: 20px;">
+        <div class="filters" style="display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end;">
+            
+            <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:12px; font-weight:600; color:#666;">Fokus Lokasi</label>
+                <select class="form-control" id="filterLocation" onchange="renderInventory()" style="min-width:140px;">
+                    <option value="all">View All (General)</option>
+                    <option value="gudang">Fokus Gudang (ATP)</option>
+                    <option value="store">Fokus Sebaran Luar</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:12px; font-weight:600; color:#666;">Koleksi</label>
+                <select class="form-control" id="filterCollection" onchange="renderInventory()" style="min-width:130px;">
+                    <option value="all">Semua Koleksi</option>
+                    <option value="Setala">Setala</option>
+                    <option value="Kala">Kala</option>
+                    <option value="Arkana">Arkana</option>
+                    <option value="Aksata">Aksata</option>
+                    <option value="Obi">Obi</option>
+                    <option value="Suar">Suar</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:12px; font-weight:600; color:#666;">Kategori</label>
+                <select class="form-control" id="filterCategory" onchange="renderInventory()" style="min-width:130px;">
+                    <option value="all">Semua Kategori</option>
+                    <option value="Shirt">Shirt</option>
+                    <option value="Outer">Outer</option>
+                    <option value="Accessories">Accessories</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+                <label style="font-size:12px; font-weight:600; color:#666;">Tipe User</label>
+                <select class="form-control" id="filterUserType" onchange="renderInventory()" style="min-width:130px;">
+                    <option value="all">Semua User</option>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:0; flex-grow: 1;">
+                <label style="font-size:12px; font-weight:600; color:#666;">Pencarian</label>
+                <input type="text" id="searchInventory" placeholder="Cari SKU / Nama..." class="form-control" onkeyup="renderInventory()">
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table">
+                <thead id="inventoryHead"> 
+                    </thead>
+                <tbody id="inventoryTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<div id="productDetailModal" class="login-overlay hidden">
+    <div class="login-box" style="width: 700px; text-align: left; max-height: 90vh; overflow-y: auto;">
+        <span style="float:right; cursor:pointer; font-size:1.5rem;" onclick="document.getElementById('productDetailModal').classList.add('hidden')">&times;</span>
+        
+        <div style="display:flex; align-items:center; gap:20px; margin-bottom:20px;">
+            <img src="" alt="Produk" id="detailImg" style="width:90px; height:90px; object-fit:cover; border-radius:12px; border:1px solid #eee;">
+            <div style="flex:1;">
+                <small id="detailSku" style="color:#888;">SKU-XXX</small>
+                <h3 id="detailName" style="color:var(--primary); margin:2px 0 5px;">Nama Produk</h3>
+                <span id="detailCategory" class="badge badge-secondary">Kategori</span>
+                <span id="detailCollection" class="badge badge-warning">Koleksi</span>
+            </div>
+            <div style="text-align:right; background:#fff2e8; padding:10px 20px; border-radius:12px; color:var(--primary);">
+                <small>Total Aset</small>
+                <h2 id="detailTotal" style="margin:0;">0</h2>
+            </div>
+        </div>
+
+        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+
+        <h4 style="margin-bottom:10px;"><i class="fas fa-th-list"></i> Rincian Sebaran Stok per Varian</h4>
+        <div class="table-responsive">
+            <table class="table" style="font-size:13px; text-align:center;">
+                <thead style="background:#f8f9fa;">
+                    <tr>
+                        <th style="text-align:left;">Varian</th>
+                        <th>Fisik (Good)</th>
+                        <th style="color:red;">Defect</th> 
+                        <th style="color:orange;">Booked</th>        
+                        <th style="color:var(--primary);">Tersedia (ATP)</th> 
+                        <th>Store Offline</th>
+                        <th>Event</th>
+                        <th>Total Aset</th>
+                    </tr>
+                </thead>
+                <tbody id="matrixDetailTable"></tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top:20px; text-align:right;">
+            <button class="btn btn-secondary" onclick="document.getElementById('productDetailModal').classList.add('hidden')">Tutup</button>
+        </div>
+    </div>
+</div>
+
+
+            <section id="view-co" class="page-section hidden">
+    <div id="co-list-view">
+        <div class="tab-container" style="margin-bottom: 20px;">
+            <button class="tab-btn active" id="tab-co-active" onclick="switchCoTab('Active')">
+                <i class="fas fa-business-time"></i> Sedang Berjalan
+            </button>
+            <button class="tab-btn" id="tab-co-history" onclick="switchCoTab('History')">
+                <i class="fas fa-history"></i> Riwayat Selesai
+            </button>
+        </div>
+
+        <div class="action-bar" style="background: white; padding: 15px; border-radius: 8px; border: 1px solid var(--border); flex-wrap: wrap; gap: 15px;">
+            <div style="flex: 1; min-width: 250px;">
+                <label style="font-size: 12px; font-weight: 600; color: #666;">Cari Project / Klien</label>
+                <div style="position: relative;">
+                    <input type="text" class="form-control" id="co-search" placeholder="Ketik nama project..." onkeyup="renderCoTable()" style="margin-bottom: 0; padding-left: 35px;">
+                    <i class="fas fa-search" style="position: absolute; left: 12px; top: 12px; color: #999;"></i>
+                </div>
+            </div>
+
+            <div style="min-width: 160px;">
+                <label style="font-size: 12px; font-weight: 600; color: #666;">Filter Status</label>
+                <select id="co-status-filter" class="form-control" onchange="renderCoTable()" style="margin-bottom: 0;">
+                    <option value="all">Semua Status</option>
+                    <option value="Pending">Pending (Baru)</option>
+                    <option value="PR Sent">PR Sent (Diajukan)</option>
+                    <option value="In Process">In Process (Produksi)</option>
+                    <option value="Finished">Finished (Selesai)</option>
+                </select>
+            </div>
+
+            <div style="min-width: 150px;">
+                <label style="font-size: 12px; font-weight: 600; color: #666;">Filter Tgl Deadline</label>
+                <input type="date" id="co-date-filter" class="form-control" onchange="renderCoTable()" style="margin-bottom: 0;">
+            </div>
+        </div>
+        
+        <div class="card" style="margin-top: 20px;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID CO</th>
+                        <th>Project</th>
+                        <th>Customer</th>
+                        <th>Qty Total</th>
+                        <th>Target Deadline</th>
+                        <th>Status</th> 
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="co-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="co-detail-view" class="hidden">
+        <div class="action-bar" style="margin-bottom: 15px; align-items: center;">
+            <button class="btn-secondary" onclick="toggleCoView('list')">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </button>
+            <div style="flex: 1; text-align: right;">
+                 <span class="text-muted" style="font-size: 0.9rem; margin-right: 10px;">Aksi Produksi:</span>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-outline" id="btn-wo-kain" onclick="prosesWOKain()">
+                    <i class="fas fa-scroll"></i> 1. Request Kain (PR)
+                </button>
+                <button id="btn-wo-jahit" class="btn-secondary" onclick="prosesWOJahit()" style="opacity: 0.5; cursor: not-allowed;">
+                    <i class="fas fa-cut"></i> 2. Request Jahit (PR) <i class="fas fa-lock" style="margin-left:5px;"></i>
+                </button>
+                <button class="btn-primary" onclick="window.print()">
+                    <i class="fas fa-print"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="card" style="padding: 20px 0;">
+            <div class="step-wizard">
+                <div class="step-item finished" id="step-1">
+                    <div class="step-circle"><i class="fas fa-check"></i></div>
+                    <div class="step-label">Order Masuk</div>
+                </div>
+                <div class="step-item active" id="step-2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Kebutuhan Kain</div>
+                </div>
+                <div class="step-item" id="step-3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Produksi (Jahit)</div>
+                </div>
+                <div class="step-item" id="step-4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Selesai</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="row" style="align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px;">
+                <div class="col">
+                    <h2 id="d-co-id" style="color:var(--primary); margin:0;">#CUST-000</h2>
+                    <small class="text-muted" id="d-co-date">Tgl Order: -</small>
+                </div>
+                <div class="col" style="text-align: right;">
+                    <span id="d-co-status" class="badge">Status</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col" style="border-right: 1px dashed #eee;">
+                    <h5 style="color:#555; margin-bottom:10px;"><i class="fas fa-user-circle"></i> Data Klien</h5>
+                    <table class="detail-table full-width">
+                        <tr><td>Nama</td><td id="d-co-cust">...</td></tr>
+                        <tr><td>Kontak</td><td id="d-co-contact">...</td></tr>
+                    </table>
+                </div>
+                <div class="col">
+                    <h5 style="color:#555; margin-bottom:10px;"><i class="fas fa-briefcase"></i> Data Project</h5>
+                    <table class="detail-table full-width">
+                        <tr><td>Project</td><td id="d-co-project">...</td></tr>
+                        <tr><td>Deadline</td><td id="d-co-deadline" class="text-danger fw-bold">...</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <h4 style="margin-bottom: 15px;">Detail Spesifikasi & Material</h4>
+        <div id="d-co-items-container">
+            </div>
+    </div>
+</section>
+
+            <section id="purchase-req" class="page-section hidden">
+    <div id="pr-list-view">
+        <div class="tab-container" style="margin-bottom: 20px;">
+            <button class="tab-btn active" id="tab-pr-active" onclick="switchPrTab('Active')">
+                <i class="fas fa-tasks"></i> PR Berjalan
+            </button>
+            <button class="tab-btn" id="tab-pr-history" onclick="switchPrTab('History')">
+                <i class="fas fa-history"></i> Riwayat Selesai
+            </button>
+        </div>
+
+        <div class="action-bar" style="background: white; padding: 15px; border-radius: 8px; border: 1px solid var(--border); flex-wrap: wrap; gap: 15px; align-items: flex-end;">
+            
+            <div style="flex: 1; min-width: 200px;">
+                <label style="font-size: 12px; font-weight: 600; color: #666; margin-bottom: 5px; display: block;">Cari ID / Item</label>
+                <div style="position: relative;">
+                    <input type="text" class="form-control" id="pr-search" placeholder="Ketik ID PR atau Item..." onkeyup="renderPrTable()" style="margin-bottom: 0; padding-left: 35px;">
+                    <i class="fas fa-search" style="position: absolute; left: 12px; top: 12px; color: #999;"></i>
+                </div>
+            </div>
+
+            <div style="min-width: 150px;">
+                <label style="font-size: 12px; font-weight: 600; color: #666; margin-bottom: 5px; display: block;">Filter Status</label>
+                <select class="form-control" id="pr-filter-status" onchange="renderPrTable()" style="margin-bottom: 0;">
+                    <option value="all">Semua Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="In Process">In Process</option>
+                    <option value="Approved">Approved</option>
+                </select>
+            </div>
+
+            <div style="min-width: 150px;">
+                <label style="font-size: 12px; font-weight: 600; color: #666; margin-bottom: 5px; display: block;">Tipe PR</label>
+                <select class="form-control" id="pr-filter-type" onchange="renderPrTable()" style="margin-bottom: 0;">
+                    <option value="all">Semua Tipe</option>
+                    <option value="Beli Kain">Beli Kain</option>
+                    <option value="Jasa Jahit">Jasa Jahit</option>
+                </select>
+            </div>
+
+             <div style="min-width: 140px;">
+                <label style="font-size: 12px; font-weight: 600; color: #666; margin-bottom: 5px; display: block;">Filter Deadline</label>
+                <input type="date" id="pr-date-filter" class="form-control" onchange="renderPrTable()" style="margin-bottom: 0;">
+            </div>
+
+            <div style="margin-left: auto;">
+                <button class="btn btn-primary" onclick="openPrModal()" style="height: 42px;">
+                    <i class="fas fa-plus"></i> Buat PR Baru
+                </button>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No. PR</th>
+                        <th>Tgl Masuk</th>
+                        <th>Tipe</th>
+                        <th>Item Utama</th>
+                        <th>Deadline Target</th> <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="pr-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="pr-form-view" class="hidden">
+        <div class="card form-card" style="max-width: 1000px;">
+            <div class="card-header">
+    <h3><i class="fas fa-arrow-left" onclick="closePrForm()" style="cursor:pointer; margin-right:10px;"></i> Form Purchase Request</h3>
+    <span class="badge badge-info" id="form-pr-type-label">Tipe PR</span>
+</div>
+
+<div class="row" style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+    <div class="col">
+        <label>Target Deadline Penyelesaian:</label>
+        <input type="date" class="form-control" id="pr-deadline">
+        <small class="text-muted">Vendor akan ditentukan saat Approval.</small>
+    </div>
+</div>
+
+            <div id="pr-view-sewing" class="hidden">
+                <h4>Daftar SKU Produk (Jahit)</h4>
+                <table class="table" style="margin-bottom: 15px;">
+                    <thead>
+                        <tr>
+                            <th>Produk / SKU</th>
+                            <th>Detail Varian & Qty</th>
+                            <th>Total Qty</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pr-items-body-sewing"></tbody>
+                </table>
+                <button class="btn btn-outline btn-full" onclick="openAddItemModal('sku')">
+                    <i class="fas fa-plus"></i> Tambah Produk (SKU)
+                </button>
+                <hr style="margin:20px 0;">
+                <div class="row">
+                    <div class="col">
+                        <h4>Estimasi Material (Otomatis)</h4>
+                        <div id="material-summary-box" style="background: #eaf2f8; padding: 15px; border-radius: 6px; font-size: 14px;">
+                            Belum ada item ditambahkan.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pr-view-fabric" class="hidden">
+                <h4>Daftar Pembelian Kain</h4>
+                <table class="table" style="margin-bottom: 15px;">
+                    <thead>
+                        <tr>
+                            <th>Motif/Preview</th>
+                            <th>ID & Nama Kain</th>
+                            <th>Stok Saat Ini</th>
+                            <th>Order (Yard)</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pr-items-body-fabric"></tbody>
+                </table>
+                <button class="btn btn-outline btn-full" onclick="openAddItemModal('fabric')">
+                    <i class="fas fa-plus"></i> Tambah Kain dari Master Data
+                </button>
+            </div>
+
+            <hr style="margin:20px 0;">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Catatan Tambahan</label>
+                        <textarea class="form-control" id="pr-notes" style="height:80px;"></textarea>
+                    </div>
+                    <div class="btn-right">
+                        <button class="btn btn-success" onclick="submitPr()">Terbitkan PR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pr-detail-view" class="hidden">
+        <div class="action-bar">
+            <button class="btn-secondary" onclick="closePrDetail()"><i class="fas fa-arrow-left"></i> Kembali ke List</button>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Cetak PDF</button>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="pr-header-layout" style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #eee; padding-bottom:15px; margin-bottom:15px;">
+                <div>
+                    <h2 style="margin:0; color:var(--primary);" id="detail-pr-id">PR-0000</h2>
+                    <span class="text-muted" id="detail-pr-date">Tanggal: -</span>
+                </div>
+                <div style="text-align:right;">
+                    <span class="badge" id="detail-pr-status">Status</span>
+                    <div style="margin-top:5px; font-weight:600;" id="detail-pr-type">Tipe PR</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <h5 class="text-muted mb-2">Vendor Tujuan</h5>
+                    <strong style="font-size:1.1rem;" id="detail-pr-vendor">-</strong>
+                    <p class="text-muted text-sm">Jalan Industri No. 12, Bandung (Simulasi)</p>
+                </div>
+                <div class="col">
+                    <h5 class="text-muted mb-2">Target Deadline</h5>
+                    <strong style="font-size:1.1rem; color:#e74c3c;" id="detail-pr-deadline">-</strong>
+                    <p class="text-muted text-sm">Harap dikirim sebelum tanggal tersebut.</p>
+                </div>
+                <div class="col">
+                    <h5 class="text-muted mb-2">Total Item</h5>
+                    <strong style="font-size:1.1rem;" id="detail-pr-total-item">-</strong>
+                </div>
+            </div>
+        </div>
+
+        <h4 style="margin-bottom:15px;">Rincian Item Purchase Request</h4>
+        <div id="detail-pr-items-container">
+            </div>
+
+    </div>
+</section>
+
+            <section id="fabric-mgmt" class="page-section hidden">
+                <div id="fabric-list-view">
+                    <div class="action-bar">
+                        <div class="filters">
+                            <input type="text" class="form-control" placeholder="Cari Nama / ID Kain..." id="fabric-search" onkeyup="filterFabric()">
+                            
+                            <select class="form-control" id="fabric-filter-status" onchange="filterFabric()">
+                                <option value="all">Semua Status</option>
+                                <option value="Active">Aktif</option>
+                                <option value="Inactive">Non-Aktif</option>
+                            </select>
+
+                            <select class="form-control" id="fabric-filter-stock" onchange="filterFabric()">
+                                <option value="all">Semua Kondisi Stok</option>
+                                <option value="safe">Stok Aman</option>
+                                <option value="low">Stok Menipis (Low)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="openFabricForm('add')">
+                            <i class="fas fa-plus"></i> Tambah Kain Baru
+                        </button>
+                    </div>
+
+                    <div class="inventory-grid" id="fabric-grid-container">
+                        </div>
+                </div>
+
+                <div id="fabric-form-view" class="hidden">
+                    <div class="card form-card" style="max-width: 800px;">
+                        <div class="card-header">
+                            <h3 id="fabric-form-title"><i class="fas fa-plus-circle"></i> Input Master Kain Baru</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group"><label>Nama Kain</label><input type="text" class="form-control" id="f-name"></div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group"><label>Vendor Utama</label><input type="text" class="form-control" id="f-vendor"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group"><label>Motif / Varian</label><input type="text" class="form-control" id="f-motif" placeholder="Misal: Putih Tulang"></div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group"><label>Jenis Material</label><input type="text" class="form-control" id="f-material" placeholder="Misal: 100% Cotton"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group"><label>Stok Awal (Yard)</label><input type="number" class="form-control" id="f-stock"></div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group"><label>Min. Stock Alert</label><input type="number" class="form-control" id="f-min-stock" value="100"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Pattern Preview (Simulasi)</label>
+                                    <select class="form-control" id="f-pattern-class">
+                                        <option value="pattern-parang">Motif Garis (Parang)</option>
+                                        <option value="pattern-mega">Motif Bulat (Mega Mendung)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Upload File Desain (Motif)</label>
+                                    <div class="file-box" style="padding: 5px 10px; background: white; border: 1px solid #ddd;">
+                                        <input type="file" id="f-design-file" accept="image/*" style="font-size: 0.9rem;">
+                                    </div>
+                                    <small class="text-muted">Format: JPG, PNG (Max 5MB)</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="btn-right">
+                            <button class="btn btn-secondary" onclick="closeFabricForm()">Batal</button>
+                            <button class="btn btn-success" onclick="saveNewFabric()">Simpan Master Data</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+    <div id="modal-fabric-edit" class="login-overlay hidden">
+        <div class="login-box" style="width: 500px; text-align: left; max-height: 90vh; overflow-y: auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3 style="margin:0; color:var(--primary);">Detail & Edit Stok</h3>
+                <i class="fas fa-times" onclick="closeFabricEditModal()" style="cursor:pointer; font-size:1.2rem;"></i>
+            </div>
+
+            <div id="modal-f-img" class="inv-img full-width" style="height: 150px; border-radius: 8px; margin-bottom: 20px; border:1px solid #ddd;"></div>
+            
+            <input type="hidden" id="edit-f-id">
+            
+            <div class="form-group">
+                <label>Nama Kain</label>
+                <input type="text" id="edit-f-name" class="form-control" readonly style="background:#f9f9f9;">
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                     <div class="form-group"><label>Stok Saat Ini (Yard)</label><input type="number" id="edit-f-stock" class="form-control"></div>
+                </div>
+                <div class="col">
+                     <div class="form-group">
+                        <label>Status</label>
+                        <select id="edit-f-status" class="form-control">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-success btn-full" onclick="saveFabricUpdate()">Update Data</button>
+
+            <div style="margin-top:25px; padding-top:15px; border-top:1px dashed #ccc;">
+                <h5 style="color:#555; margin-bottom:10px;"><i class="fas fa-link"></i> Produk Terkait (Uses this Fabric)</h5>
+                <div id="related-products-list" style="display:flex; flex-direction:column; gap:10px;">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+        </main>
+    </div>
+
+    <div id="pr-source-modal" class="login-overlay hidden">
+        <div class="login-box" style="width: 500px; text-align: left;">
+            <h3>Mulai Purchase Request</h3>
+            <p>Pilih jenis PR yang akan dibuat:</p>
+            <div style="display:grid; gap:10px; margin-top:20px;">
+                <button class="btn btn-outline" style="justify-content:space-between; padding:15px;" onclick="initPr('co')">
+                    <span><i class="fas fa-user-tag"></i> <strong>PR Jahit</strong> (via Custom Order)</span>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="btn btn-outline" style="justify-content:space-between; padding:15px;" onclick="goToInventoryForRestock()">
+    <span><i class="fas fa-shirt"></i> <strong>PR Jahit</strong> (via Restock SKU)</span>
+    <i class="fas fa-arrow-right"></i> </button>
+                <button class="btn btn-outline" style="justify-content:space-between; padding:15px; border-color: #CF5306; color:#CF5306;" onclick="initPr('fabric')">
+                    <span><i class="fas fa-scroll"></i> <strong>PR Kain</strong> (Pembelian Material)</span>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <button class="btn btn-secondary btn-full" style="margin-top:20px;" onclick="closePrModal()">Batal</button>
+        </div>
+    </div>
+
+    <div id="co-picker-modal" class="login-overlay hidden">
+        <div class="login-box" style="width: 600px; text-align: left;">
+            <h3>Pilih Custom Order</h3>
+            <div style="max-height: 300px; overflow-y: auto; margin: 15px 0;">
+                <table class="table">
+                    <thead><tr><th>ID</th><th>Project</th><th>Aksi</th></tr></thead>
+                    <tbody id="co-picker-body"></tbody>
+                </table>
+            </div>
+            <button class="btn btn-secondary btn-full" onclick="document.getElementById('co-picker-modal').classList.add('hidden')">Batal</button>
+        </div>
+    </div>
+
+    <div id="add-item-modal" class="login-overlay hidden">
+        <div class="login-box" style="width: 600px; text-align: left;">
+            <h3 id="modal-add-title">Tambah Item</h3>
+            <div class="form-group">
+                <label id="modal-search-label">Cari SKU / Nama</label>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="modal-search-input" class="form-control" placeholder="Ketik kata kunci...">
+                    <button class="btn btn-primary" onclick="searchItemForModal()">Cari</button>
+                </div>
+            </div>
+            
+            <div id="modal-item-result" class="hidden" style="background: #f9f9f9; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+                <div style="display:flex; justify-content:space-between;">
+                    <h5 id="modal-res-name">Nama Item</h5>
+                    <span class="badge badge-info" id="modal-res-id">ID</span>
+                </div>
+                <hr style="margin: 10px 0; border:0; border-top:1px solid #ddd;">
+                <div id="modal-res-content"></div>
+            </div>
+
+            <div class="btn-right">
+                <button class="btn btn-secondary" onclick="closeAddItemModal()">Batal</button>
+                <button class="btn btn-success" onclick="confirmAddItem()">Tambahkan</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="restockActionBar" class="floating-action-bar hidden">
+    <span><span id="selectedCount">0</span> Produk Dipilih</span>
+    <div style="height: 20px; width: 1px; background: #ffffff50;"></div>
+    <button class="btn btn-sm btn-primary" onclick="initPr('restock_sku')">
+        <i class="fas fa-cart-plus"></i> Buat PR Restock
+    </button>
+    <button class="btn-icon" onclick="clearSelection()" style="color: #ccc; margin-left: 5px;">
+        <i class="fas fa-times"></i>
+    </button>
+</div>
+
+    <script src="planning-script.js"></script>
+</body>
+</html>

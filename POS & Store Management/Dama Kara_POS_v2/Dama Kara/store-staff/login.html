@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login POS - Batik ABC</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="logo-area">
+            <img src="../gambar/logo2.png" alt="Dama Kara Logo" class="login-logo-img">
+            <h3 style="margin-bottom: 20px; color: #555;">Store Staff Access</h3>
+        </div>
+        <form id="loginForm">
+            <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                <label>Username / ID Karyawan</label>
+                <input type="text" id="usernameInput" placeholder="Contoh: Budi01" class="input-field" required>
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <label>Kode Akses / Password</label>
+                <input type="password" id="passwordInput" placeholder="******" class="input-field" required>
+            </div>
+            <button type="submit" class="btn-primary full-width" style="margin-top: 20px; padding: 15px;">Masuk ke POS</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Validasi dummy, langsung masuk
+            window.location.href = 'app.html';
+        });
+    </script>
+</body>
+</html>

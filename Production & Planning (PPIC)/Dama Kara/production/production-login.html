@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Production - Batik ABC</title>
+    <link rel="stylesheet" href="production-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="logo-area">
+            <img src="../gambar/logo2.png" alt="Dama Kara Logo" class="login-logo-img">
+            <h2 style="margin-top: 10px;">PPIC Portal</h2>
+            <p class="text-muted" style="font-size: 0.9rem;">Perencanaan Produksi & Inventory</p>
+        </div>
+        <form id="loginForm">
+            <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                <label>Username / NIK</label>
+                <input type="text" id="usernameInput" placeholder="production_admin" class="form-control" required>
+            </div>
+            <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                <label>Password</label>
+                <input type="password" id="passwordInput" placeholder="******" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" style="margin-top: 20px; padding: 15px;">Masuk Portal</button>
+        </form>
+    </div>
+
+   <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Mencegah form reload halaman
+        
+        const user = document.getElementById('usernameInput').value;
+        const pass = document.getElementById('passwordInput').value;
+
+        // Validasi Sederhana
+        if(user && pass) {
+            // Ubah tombol jadi loading
+            const btn = this.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memuat...';
+            btn.disabled = true;
+            
+            // Simulasi loading 1 detik lalu pindah halaman
+            setTimeout(() => {
+                // REDIRECT KE PRODUCTION.HTML
+                window.location.href = 'production.html';
+            }, 1000);
+        } else {
+            alert('Harap isi username dan password!');
+        }
+    });
+</script>
+</body>
+</html>

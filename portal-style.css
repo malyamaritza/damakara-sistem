@@ -1,0 +1,507 @@
+/* ==========================================================================
+   DAMA KARA - PORTAL TERINTEGRASI (COMPACT & CLEAN)
+   Warna: Terracotta (#CF5306), Background Bersih (#F4F7F9), Font Poppins
+   ========================================================================== */
+
+:root {
+    --primary: #CF5306;
+    --primary-dark: #a84305;
+    --primary-light: #FFF0E6;
+    --primary-gradient: linear-gradient(135deg, #CF5306 0%, #FF8C42 100%);
+    --bg-body: #F4F7F9;
+    --card-bg: #FFFFFF;
+    --text-dark: #2C3E50;
+    --text-muted: #64748B;
+    --border: #E2E8F0;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 12px 24px rgba(207, 83, 6, 0.12);
+    --radius: 12px;
+    --transition: all 0.2s ease-in-out;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+/* --- HEADER --- */
+.portal-header {
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.brand-logo {
+    height: 42px;
+    width: auto;
+    object-fit: contain;
+}
+
+.brand-info h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.1;
+    letter-spacing: 0.5px;
+}
+
+.brand-info span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.badge-tag {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid rgba(207, 83, 6, 0.2);
+}
+
+/* --- MAIN CONTAINER --- */
+.main-wrapper {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 20px 48px;
+    width: 100%;
+    flex: 1;
+}
+
+/* --- INTRO CARD (DAMAKARA & PROSES BISNIS SINGKAT) --- */
+.intro-box {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow-sm);
+    border-left: 5px solid var(--primary);
+}
+
+.intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.intro-col h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.intro-col p {
+    font-size: 0.84rem;
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.flow-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.flow-step {
+    background: var(--bg-body);
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.flow-arrow {
+    color: var(--primary);
+    font-size: 0.7rem;
+}
+
+/* --- SECTION TITLE --- */
+.section-title-bar {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.section-title-bar h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-title-bar h2 i {
+    color: var(--primary);
+}
+
+.section-title-bar p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+/* --- 4 MODUL UTAMA GRID (BERANDA) --- */
+.portal-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.module-box {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+}
+
+.module-box:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary);
+}
+
+.module-box-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.module-icon-box {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    transition: var(--transition);
+}
+
+.module-box:hover .module-icon-box {
+    background: var(--primary);
+    color: #FFFFFF;
+}
+
+.role-pill {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: #F1F5F9;
+    color: var(--text-muted);
+}
+
+.module-box-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.module-box-desc {
+    font-size: 0.83rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 18px;
+    flex: 1;
+}
+
+.btn-open-module {
+    padding: 9px 14px;
+    border-radius: 8px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: 1px solid rgba(207, 83, 6, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.module-box:hover .btn-open-module {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+}
+
+/* --- SUB-PORTAL MODUL TAMPILAN (ROLE CHOOSER) --- */
+.subportal-container {
+    display: none;
+    animation: fadeIn 0.25s ease;
+}
+
+.subportal-container.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.back-bar {
+    margin-bottom: 18px;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-back:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.subportal-header-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.subportal-header-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: var(--primary-gradient);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.subportal-header-text h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.subportal-header-text p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* --- ROLE CARDS GRID --- */
+.roles-compact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.role-card-compact {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+}
+
+.role-card-compact:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+}
+
+.role-card-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.role-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.role-info h4 {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.role-info span {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.role-task-desc {
+    font-size: 0.82rem;
+    color: var(--text-dark);
+    line-height: 1.55;
+    background: #F8FAFC;
+    border-left: 3px solid var(--primary);
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    flex: 1;
+}
+
+.role-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-login-action {
+    flex: 1;
+    padding: 9px 12px;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #FFFFFF;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: var(--transition);
+}
+
+.btn-login-action:hover {
+    background: var(--primary-dark);
+}
+
+.btn-app-action {
+    padding: 9px 12px;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: var(--text-dark);
+    border: 1px solid var(--border);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: var(--transition);
+}
+
+.btn-app-action:hover {
+    background: var(--bg-body);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* --- FOOTER --- */
+.portal-footer-clean {
+    background: #FFFFFF;
+    border-top: 1px solid var(--border);
+    padding: 18px 24px;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: auto;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .intro-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .portal-grid-4 {
+        grid-template-columns: 1fr;
+    }
+    .roles-compact-grid {
+        grid-template-columns: 1fr;
+    }
+    .subportal-header-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
